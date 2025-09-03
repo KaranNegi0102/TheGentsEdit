@@ -9,10 +9,10 @@ export default function Navbar () {
       <div>
         <Image src={logo} alt='logo' width={250} height={250} className='mt-1' />
       </div>
-      <div className='cursor-pointer epunda-slab-medium flex flex-row gap-4'>
-        <h1 className='hover:underline' >Home</h1>
-        <h1 className='hover:underline' >About</h1>
-        <h1 className='hover:underline'>Contact</h1>
+      <div className=' epunda-slab-medium flex flex-row gap-4'>
+        <h1 className='cursor-pointer hover:underline' >Home</h1>
+        <h1 className='hover:underline cursor-pointer' >About</h1>
+        <h1 className='hover:underline cursor-pointer'>Contact</h1>
       </div>
       <div className='epunda-slab-medium  flex flex-row gap-4'>
         <h1>Sign In</h1>
