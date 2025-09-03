@@ -1,4 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Epunda+Slab:ital,wght@0,300..900;1,300..900&display=swap');
 @import "tailwindcss";
+
+/* Flatline Serif Medium  to be used for the font*/
+/* #4F4F4D */
+
+
+.epunda-slab-medium {
+  font-family: "Epunda Slab", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
 
 :root {
   --background: #ffffff;
