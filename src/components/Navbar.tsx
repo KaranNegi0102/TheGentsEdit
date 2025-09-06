@@ -6,8 +6,8 @@ import AuthModal from "./AuthModal";
 import Link from "next/link";
 
 
-
 export default function Navbar() {
+
   const [openModal, setOpenModal] = useState<"login" | "register" | null>(null);
 
   return (
@@ -46,14 +46,6 @@ export default function Navbar() {
                 className="text-gray-700 font-bold after:content-[''] after:absolute after:left-2 after:-bottom-1 after:w-15 after:h-[2px] after:bg-gray-800 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
               >
                 ABOUT US
-              </Link>
-            </li>
-            <li className="relative">
-              <Link
-                href="/Contact"
-                className="text-gray-700 font-bold after:content-[''] after:absolute after:left-2 after:-bottom-1 after:w-15 after:h-[2px] after:bg-gray-800 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-              >
-                CONTACT
               </Link>
             </li>
           </ul>

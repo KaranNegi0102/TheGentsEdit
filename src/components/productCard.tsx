@@ -123,7 +123,7 @@ export default function ProductCard (){
                 cardRefs.current[i] = el;
               }}
               key={i}
-              className=" rounded-lg p-4 m-4 cursor-pointer w-72 h-[420px] flex flex-col items-center justify-between shadow-md "
+              className=" rounded-lg p-4 m-4 cursor-pointer w-72 h-[420px] flex flex-col items-center justify-between shadow-lg "
             >
               <Image
                 src={product.image}
