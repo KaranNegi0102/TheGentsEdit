@@ -49,7 +49,7 @@ export default function Collection() {
 
           {/* collection part div where collections will be shown */}
           <div className="flex-4 h-full">
-            <h1 className="text-3xl mb-6">––––– ALL COLLECTIONS –––––</h1>
+            <h1 className="text-3xl mb-6">––– ALL ARTICLES –––</h1>
             <CollectionCard />
           </div>
         </div>
