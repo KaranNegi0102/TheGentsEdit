@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useState,useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import gsap from "gsap";
 import { useForm } from "react-hook-form";
@@ -23,6 +23,9 @@ export default function AuthModal({
   const borderRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const router = useRouter();
 
+
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (isOpen && formRef.current) {
       const [top, right, bottom, left] = borderRefs.current;
@@ -40,7 +43,7 @@ export default function AuthModal({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ email: string; password: string }>();
+  } = useForm<{ email: string; password: string,name:string,phone_number:string,address:string }>();
 
   const onLogin = async (data: { email: string; password: string }) => {
     try {
@@ -58,21 +61,55 @@ export default function AuthModal({
         console.log("user Logged In successfully");
 
         onClose();
-        router.refresh();
         router.push("/");
+        window.location.reload();
       } else {
         console.log("user not logged in ");
       }
     } catch (error) {
       console.log(error);
     }
+    finally{
+      setLoading(false);
+    }
   };
+
+  const onRegister = async (data:{name:string,email:string,password:string,phone_number:string,address:string})=>{
+    setLoading(true);
+
+    const formData = {
+      ...data,
+      phone_number:data.phone_number.startsWith("+91")
+      ? data.phone_number
+      : `+91${data.phone_number}`,
+    };
+
+    try{
+      const response = await axios.post("/api/auth/register",formData,{
+        withCredentials:true,
+      })
+      console.log("this is my response ",response)
+      if(response.data.success){
+        console.log("user register successfully");
+        onTypeChange("login");
+      }
+      else{
+        console.log("user not register");
+      }
+    }
+    catch(error){
+      console.log(error)
+    }
+    finally{
+      setLoading(false);
+    }
+  }
 
   if (!isOpen || !type) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center text-black backdrop-blur-xs">
-      <div className="bg-white shadow-lg p-8 w-[400px] relative " ref={formRef}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center  text-black backdrop-blur-xs">
+      <div className="bg-white shadow-lg p-8 w-[400px]  relative " ref={formRef}>
         {/* Top border */}
         <span
           className="absolute top-0 left-0 w-0 h-[2px] bg-gray-700"
@@ -112,10 +149,10 @@ export default function AuthModal({
         {/* Login Form */}
         {type === "login" && (
           <div>
-            <h1 className="text-3xl epunda-slab-medium mb-2 text-gray-800 text-center">
+            <h1 className="text-4xl epunda-slab-light mb-2 text-gray-800 text-center">
               The Gents Edit
             </h1>
-            <h2 className="text-sm epunda-slab-medium mb-10 text-gray-700 text-center">
+            <h2 className="text-sm epunda-slab-light mb-10 text-gray-700 text-center">
               Visit your account
             </h2>
             <form
@@ -126,7 +163,7 @@ export default function AuthModal({
                 type="email"
                 placeholder="Email"
                 {...register("email", { required: "Email is Required" })}
-                className="border-gray-300 border w-full text-gray-700 p-2 "
+                className="border-gray-300 border-b w-full text-gray-700 p-2 "
               />
               {/* {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>} */}
 
@@ -134,11 +171,16 @@ export default function AuthModal({
                 type="password"
                 placeholder="Password"
                 {...register("password", { required: "Password is Required" })}
-                className="border-gray-300 border mb-7 text-gray-700 w-full p-2"
+                className="border-gray-300 border-b mb-7 text-gray-700 w-full p-2"
               />
-              <button className="bg-black text-white w-1/2 p-2 cursor-pointer hover:bg-gray-700">
-                Sign In
-              </button>
+             <button
+              disabled={loading}
+              className={`bg-black text-white w-1/2 p-2 cursor-pointer hover:bg-gray-700 ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {loading ? "Signing In..." : "Sign In"}
+            </button>
 
               <p className="text-center mt-3 text-sm">
                 Don&apos;t have account ? <br />
@@ -158,36 +200,57 @@ export default function AuthModal({
 
         {/* Register Form */}
         {type === "register" && (
-          <div>
-            <h1 className="text-3xl epunda-slab-medium mb-2 text-gray-800 text-center">
+          <div className="">
+            <h1 className="text-4xl epunda-slab-light  text-gray-800 text-center">
               The Gents Edit
             </h1>
-            <h2 className="text-sm epunda-slab-light mb-13 text-gray-600 text-center">
+            <h2 className="text-sm epunda-slab-light mb-7 text-gray-700 text-center">
               Edit your account
             </h2>
-            <form className="flex flex-col epunda-slab-light items-center gap-3">
+
+            <form onSubmit={handleSubmit(onRegister)} className="flex flex-col epunda-slab-light items-center gap-2">
               <input
                 type="name"
                 placeholder="Name"
-                className="border-gray-300 border w-full text-gray-700 p-2 "
+                className="border-gray-300 border-b w-full text-gray-700 p-2 "
+                {...register("name",{required:"name is required"})}
               />
               <input
                 type="email"
                 placeholder="Email"
-                className="border-gray-300 border w-full text-gray-700 p-2 "
+                className="border-gray-300 border-b w-full text-gray-700 p-2 "
+                {...register("email",{required:"email is required"})}
               />
               <input
                 type="password"
                 placeholder="Password"
-                className="border-gray-300 border text-gray-700 w-full p-2"
+                className="border-gray-300 border-b text-gray-700 w-full p-2"
+                {...register("password",{required:"password is required"})}
               />
+              <div className="flex items-center w-full border-b border-gray-300">
+              <span className="px-2 text-gray-600">+91</span>
               <input
-                type="phone"
+                type="tel"
                 placeholder="Phone"
-                className="border-gray-300 border mb-7 text-gray-700 w-full p-2"
+                className="flex-1 p-2 text-gray-700 outline-none"
+                {...register("phone_number", { required: "Phone number is required" })}
               />
-              <button className="bg-black text-white w-1/2 p-2 cursor-pointer hover:bg-gray-700">
-                Sign Up
+            </div>
+              <input
+                type="address"
+                placeholder="Address"
+                className="border-gray-300 border-b mb-5 text-gray-700 w-full p-2"
+                {...register("address",{required:"address is required"})}
+              />
+
+
+              <button
+                disabled={loading}
+                className={`bg-black text-white w-1/2 p-2 cursor-pointer hover:bg-gray-700 ${
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                {loading ? "Signing Up..." : "Sign Up"}
               </button>
               <p className="text-center mt-3 text-sm">
                 Already have account ? <br />

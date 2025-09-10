@@ -15,9 +15,9 @@ export default function Navbar() {
   console.log("isLoggedIn", isLoggedIn);
   console.log("this is my userdata", userData);
 
-  // useEffect(() => {
-  //   dispatch(fetchUserData());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
 
   const [openModal, setOpenModal] = useState<"login" | "register" | null>(null);
 
@@ -67,7 +67,7 @@ export default function Navbar() {
               <>
                 <li className="relative">
                   <Link
-                    href="/profile"
+                    href="/Profile"
                     className="text-gray-700 font-bold after:content-[''] after:absolute after:left-2 after:-bottom-1 after:w-11 after:h-[2px] after:bg-gray-800 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
                   >
                     PROFILE
