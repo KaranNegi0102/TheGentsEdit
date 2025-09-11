@@ -1,86 +1,95 @@
 "use client";
-import Navbar from "@/components/Navbar";
+
+
 import React, { useEffect, useState } from "react";
+import { addToCart, fetchCart } from "@/app/redux/slices/cartSlice";
+// import axios from "axios";
 import Image from "next/image";
 import Footer from "@/components/Footer";
-import { useSearchParams } from "next/navigation";
-import axios from "axios";
-import { useAppSelector } from "@/app/hooks/hooks";
+import Navbar from "@/components/Navbar";
+import { useAppSelector,useAppDispatch } from "@/app/hooks/hooks";
+import {  fetchProducts } from "@/app/redux/slices/productSlice";
+import { useParams } from "next/navigation";
 
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  images: string[];
-  category?: string;
-  brand?: string;
-  best_seller?: boolean;
-  stock_quantity?: number;
-}
+
+// interface Product {
+//   id: number;
+//   title: string;
+//   description: string;
+//   price: number;
+//   images: string[];
+//   category?: string;
+//   brand?: string;
+//   best_seller?: boolean;
+//   stock_quantity?: number;
+// }
 
 export default function ProductInfo() {
-  const searchParams = useSearchParams();
-  const productId = searchParams.get("id");
-  const [product, setProduct] = useState<Product | null>(null);
-  const [mainImage, setMainImage] = useState<string>("/logo.png");
+  // const [product, setProduct] = useState<Product | null>(null);
+  // const [mainImage, setMainImage] = useState<string>("/logo.png");
   const { userData } = useAppSelector((state) => state.auth);
+  const {id} = useParams();  // product id from /product/[id]
+  const productId = Number(id)
+  const dispatch = useAppDispatch();
 
-  console.log("this is my userdata in profile", userData?.id);
+  const { products, status } = useAppSelector((state) => state.products);
+
+  const product = products.find((p)=>String(p.id)==String(id))
+
+  const [mainImage,setMainImage] = useState("/logo.png")
+
+  useEffect(()=>{
+    if(!products.length && status == "idle"){
+      dispatch(fetchProducts());
+    }
+  },[products.length,status,dispatch])
 
   useEffect(() => {
-    if (!productId) return;
-
-    const fetchProduct = async () => {
-      try {
-        const res = await axios.get(`/api/getProductById/${productId}`);
-        const p: Product = res?.data?.product;
-        if (p) {
-          setProduct(p);
-          const imagesValue = (p as unknown as { images?: unknown }).images;
-          const imgs = Array.isArray(imagesValue)
-            ? (imagesValue as string[])
-            : typeof imagesValue === "string"
-            ? [imagesValue as string]
-            : [];
-          setMainImage(imgs[0] || "/logo.png");
-        }
-      } catch (error) {
-        console.log("Error fetching product:", error);
-      }
-    };
-
-    fetchProduct();
-  }, [productId]);
-
-  if (!product) return <p>Loading...</p>;
-
-  const images =
-    Array.isArray(product.images) && product.images.length > 0
-      ? product.images
-      : ["/logo.png"];
+    if (product?.images?.length) {
+      setMainImage(product.images[0]);
+    }
+  }, [product]);
+  
+  // fetch cart on page load
+  useEffect(() => {
+    if (userData?.id) {
+      dispatch(fetchCart(userData.id));
+    }
+  }, [userData, dispatch]);
 
   const handleAddToCart = async () => {
-    try {
-      const userId = userData?.id;
-      if (!userId) {
-        alert("Please log in to add items to your cart.");
-        return;
-      }
-      if (!productId) {
-        alert("Invalid product.");
-        return;
-      }
-
-      await axios.post(`/api/cart/${userId}`, {
-        productId: productId,
-        quantity: 1,
-      });
-      alert("Added to cart!");
-    } catch (error) {
-      console.log("Error adding to cart:", error);
+    if (!userData?.id) {
+      alert("Please log in to add items to your cart.");
+      return;
     }
+
+    if (!productId) {
+      alert("Invalid product.");
+      return;
+    }
+
+    dispatch(addToCart({ userId: userData.id, productId}));
+    alert("Added to cart!");
   };
+
+
+  // needed to update this below part
+  if (status === "loading" && !product) {
+    return <p className="p-8">Loading...</p>;
+  }
+
+  if (!product) {
+    return <p className="p-8">Product not found.</p>;
+  }
+
+  const images =
+  Array.isArray(product.images) && product.images.length > 0
+  ? product.images
+  : ["/logo.png"];
+  
+  
+  
+  
 
   return (
     <div className="bg-white text-black">

@@ -30,7 +30,7 @@ export async function POST(req:NextRequest){
 
     const token = jwt.sign(tokenPayload,process.env.SECRET_KEY!,
       {
-        expiresIn:"1h",
+        expiresIn:"7d",
         algorithm:"HS256"
       }
     )

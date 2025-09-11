@@ -9,7 +9,7 @@ export async function GET(
     const { userId } = await context.params;
 
     const result = await pool.query(
-      `SELECT c.id, c.quantity, p.title, p.price, p.description, p.images
+      `SELECT c.id,c.product_id, c.quantity, p.title, p.price, p.description, p.images
        FROM cart c
        JOIN products p ON c.product_id = p.id
        WHERE c.user_id = $1`,
@@ -42,7 +42,7 @@ export async function POST(
       `INSERT INTO cart (user_id, product_id, quantity)
        VALUES ($1, $2, $3)
        ON CONFLICT (user_id, product_id) 
-       DO UPDATE SET quantity = cart.quantity + EXCLUDED.quantity
+       DO UPDATE SET quantity = EXCLUDED.quantity
        RETURNING *`,
       [userId, productId, quantity]
     );

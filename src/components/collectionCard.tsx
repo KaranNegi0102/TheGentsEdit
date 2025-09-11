@@ -17,6 +17,7 @@ export default function CollectionCard() {
   // const [products, setProducts] = useState<ProductApi[]>([]);
 
   const { products } = useAppSelector((state) => state.products);
+  console.log("this is my products" ,products)
 
 
 
@@ -37,30 +38,18 @@ export default function CollectionCard() {
   // }, []);
 
 
-
-
   return (
     <div className=" grid grid-cols-3 epunda-slab-medium p-3 ">
       {products.map((product) => {
-        const imageField = product?.images;
-        const primaryImage = Array.isArray(imageField)
-          ? imageField[0]
-          : imageField ?? undefined;
-        const safeSrc = primaryImage || "/logo.png";
-        const priceNumber =
-          typeof product.price === "string"
-            ? parseFloat(product.price)
-            : product.price;
-
         return (
           <Link
             key={product.id}
-            href={`/productInfo?id=${product.id}`}
+            href={`/productInfo/${product.id}`}
             className=" p-3 cursor-pointer h-full flex flex-col  "
           >
             <div className="overflow-hidden">
               <Image
-                src={products.images?.[0]}
+                src={product?.images?.[0]}
                 alt={product.title}
                 width={300}
                 height={300}
@@ -74,7 +63,7 @@ export default function CollectionCard() {
                 // {product.description}
               </p> */}
               <p className="text-lg mt-3 text-left font-bold text-gray-700 ">
-                ₹{priceNumber}
+                ₹{product.price}
               </p>
             </div>
           </Link>
