@@ -1,15 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/app/hooks/hooks";
-import { fetchUserData, logout } from "@/app/redux/slices/authSlice";
+import { useAppSelector } from "@/app/hooks/hooks";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "../../../../public/logo.png";
 import axios from "axios";
 
 export default function ProfilePage() {
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const { isLoggedIn, userData, loading } = useAppSelector(
     (state) => state.auth
@@ -24,11 +22,6 @@ export default function ProfilePage() {
     address: "",
   });
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      dispatch(fetchUserData());
-    }
-  }, [dispatch, isLoggedIn]);
 
   useEffect(() => {
     if (userData) {

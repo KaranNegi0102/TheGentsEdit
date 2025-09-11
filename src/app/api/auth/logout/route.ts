@@ -1,15 +1,30 @@
-import { NextResponse } from "next/server";
+import { NextResponse  } from "next/server";
+import { cookies } from "next/headers";
 
-export async function POST() {
-  const response = NextResponse.json({ success: true, message: "Logged out" });
+export async function GET(){
+  try{
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth_token")?.value;
 
-  response.cookies.set("auth_token", "", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    path: "/",
-    expires: new Date(0), 
-  });
+    if (!token) {
+      return NextResponse.json({ message: "No token found" }, { status: 200 });
+    }
 
-  return response;
+
+    const response = NextResponse.json(
+      {
+        success:true,
+        message:"logout successfully"
+      },
+      {status:200}
+    );
+
+
+    response.cookies.delete("auth_token");
+    return response;
+
+  }
+  catch(error){
+    console.log("error in the logout backend --> ",error);
+  }
 }

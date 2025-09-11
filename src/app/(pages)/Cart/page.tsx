@@ -1,48 +1,40 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import axios from "axios";
+import { useAppSelector } from "@/app/hooks/hooks";
 
 interface CartItem {
   id: number;
-  name: string;
+  title: string;
   price: number;
   quantity: number;
-  image: string;
+  images: string[];
   description: string;
 }
 
 const Cart = () => {
-  // Sample cart data - in a real app, this would come from state management
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "Men Round Neck Pure Cotton T-shirt",
-      price: 999,
-      quantity: 2,
-      image:
-        "https://plus.unsplash.com/premium_photo-1688497831535-120bd47d9f9c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D",
-      description:
-        "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves.",
-    },
-    {
-      id: 2,
-      name: "Classic Blue Denim Jeans",
-      price: 900,
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1523381294911-8d3cead13475",
-      description: "Classic blue denim jeans with a slim fit.",
-    },
-    {
-      id: 3,
-      name: "Premium Leather Jacket",
-      price: 3500,
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1523381294911-8d3cead13475",
-      description: "Premium black leather jacket with zip closure.",
-    },
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  
+  const { userData } = useAppSelector((state) => state.auth);
+
+  const userId = userData?.id;
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+      if (!userId) return;
+      try {
+        const response = await axios.get(`/api/cart/${userId}`);
+        console.log("this is my response in cart", response.data.cart);
+        setCartItems(response.data.cart || []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchCartData();
+  }, [userId]);
 
   const updateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity <= 0) {
@@ -98,8 +90,8 @@ const Cart = () => {
                   className="border border-gray-200 rounded-lg p-6 flex gap-4"
                 >
                   <Image
-                    src={item.image}
-                    alt={item.name}
+                    src={item.images?.[0]}
+                    alt={item.title}
                     width={120}
                     height={120}
                     className="object-cover rounded"
@@ -107,7 +99,7 @@ const Cart = () => {
 
                   <div className="flex-1">
                     <h3 className="text-xl epunda-slab-medium mb-2">
-                      {item.name}
+                      {item.title}
                     </h3>
                     <p className="text-gray-600 epunda-slab-light mb-3 text-sm line-clamp-2">
                       {item.description}

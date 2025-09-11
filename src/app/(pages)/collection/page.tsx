@@ -3,6 +3,8 @@ import React from "react";
 import CollectionCard from "@/components/collectionCard";
 
 export default function Collection() {
+
+
   return (
     <div className="bg-white">
       <Navbar />
