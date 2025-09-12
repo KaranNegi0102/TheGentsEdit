@@ -1,19 +1,19 @@
 "use client"
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "@/components/Navbar";
 import Image from "next/image";
-import rightSideImage from "../../public/RightSideImage.jpg";
-import exchangeLogo from "../../public/exchangeLogo.png";
-import returnLogo from "../../public/returnlogo.png";
-import policyLogo from "../../public/policylogo.png";
-import model from "../../public/model.jpg";
-
-import Footer from "../components/Footer";
+import rightSideImage from "../../../../public/RightSideImage.jpg";
+import exchangeLogo from "../../../../public/exchangeLogo.png";
+import returnLogo from "../../../../public/returnlogo.png";
+import policyLogo from "../../../../public/policylogo.png";
+import model from "../../../../public/model.jpg";
+import Footer from "@/components/Footer"
 import gsap from "gsap";
 import {useEffect , useRef} from "react";
 import ProductCard from "@/components/productCard";
 import TextPlugin from 'gsap/TextPlugin';
 import { useAppSelector} from "@/app/hooks/hooks";
+import LandingProduct from "@/components/LandingProduct";
 
 
 gsap.registerPlugin(TextPlugin)
@@ -59,6 +59,7 @@ export default function Home() {
   return (
     <div className="bg-white">
       <Navbar />
+      {/* <LandingProduct/> */}
       {/* yeh landing page ka front wala image and text h */}
       <div className="bg-white p-9 mb-3 ">
         <div className=" bg-[#f5f2e9] h-[340px] flex items-center justify-between">
@@ -75,7 +76,7 @@ export default function Home() {
               alt="image"
               width={500}
               height={500}
-              className="w-full h-[340px]  object-cover"
+              className="w-full h-[340px] object-cover"
             />
           </div>
         </div>
@@ -83,9 +84,9 @@ export default function Home() {
 
       {/* latest wala section */}
       <div className="bg-white text-black mt-12 mb-9  ">
-        <div className="flex flex-col justify-center text-center">
+        <div className="flex flex-col justify-center mb-3 text-center">
           <h1 className=" text-3xl epunda-slab-medium">
-            NEW <span className="text-gray-700">ARRIVALS</span>
+            LATEST <span className="text-gray-700">COLLECTIONS</span>
           </h1>
           <h2 className="text-gray-700">
             Fresh Styles, New Trends – Explore Our Latest Collections!
@@ -95,10 +96,10 @@ export default function Home() {
       </div>
 
       {/* best seller wala section */}
-      <div className="bg-white text-black mt-24 ">
-        <div className="flex flex-col justify-center text-center">
+      <div className="bg-white text-black mt-12 ">
+        <div className="flex flex-col justify-center mb-8 text-center">
           <h1 className=" text-3xl epunda-slab-medium">
-            BEST <span className="text-gray-700"> ARTICLES </span>
+            BEST <span className="text-gray-700">SELLER</span>
           </h1>
           <h2>Most Loved, Most Wanted – Shop Our Best Sellers!</h2>
         </div>

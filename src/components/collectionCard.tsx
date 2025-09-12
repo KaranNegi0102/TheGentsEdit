@@ -13,12 +13,38 @@ import { useAppSelector } from "@/app/hooks/hooks";
 //   images?: string[] | string | null;
 // }
 
-export default function CollectionCard() {
+
+interface CollectionCardProps {
+  selectedTypes: string[];
+  sortBy: string;
+}
+
+export default function CollectionCard({ selectedTypes, sortBy }: CollectionCardProps) {
   // const [products, setProducts] = useState<ProductApi[]>([]);
 
   const { products } = useAppSelector((state) => state.products);
   console.log("this is my products" ,products)
 
+
+  let filteredProducts = products;
+
+  if (selectedTypes.length > 0) {
+    filteredProducts = filteredProducts.filter((p) =>
+      selectedTypes.includes(p.category) // assumes your product has a "type" field
+    );
+  }
+
+  // sorting part
+  if (sortBy === "low-high") {
+    filteredProducts = [...filteredProducts].sort((a, b) => Number(a.price) - Number(b.price));
+  } else if (sortBy === "high-low") {
+    filteredProducts = [...filteredProducts].sort((a, b) => Number(b.price) - Number(a.price));
+  }
+  // i have to add on
+  // else if (sortBy === "popular") {
+  //   filteredProducts = [...filteredProducts].sort((a, b) => b.sales - a.sales); // example
+  // }
+  // "
 
 
   // note --------------------------------------------
@@ -40,7 +66,7 @@ export default function CollectionCard() {
 
   return (
     <div className=" grid grid-cols-3 epunda-slab-medium p-3 ">
-      {products.map((product) => {
+      {filteredProducts.map((product) => {
         return (
           <Link
             key={product.id}

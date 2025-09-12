@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useAppSelector } from "@/app/hooks/hooks";
+import Link from "next/link"
 
 interface ProductCardProps {
   type: "latest" | "bestSeller";
@@ -18,9 +19,10 @@ export default function ProductCard({ type }: ProductCardProps) {
       return [...products].sort(
         (a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
+      ).slice(0, 8).sort(() => Math.random() - 0.5).reverse();
+
     } else if (type === "bestSeller") {
-      return products.filter((p) => p.best_seller === true);
+      return products.filter((p) => p.best_seller === true).slice(0, 4);
     }
     return products;
   }, [products, type]);
@@ -149,30 +151,32 @@ export default function ProductCard({ type }: ProductCardProps) {
   console.log("this is my filtereed products", filteredProducts);
 
   return (
-    <div className="flex flex-wrap p-4 justify-center">
+    <div className="flex  flex-wrap p-4 justify-center">
       {filteredProducts.map((product) => (
-        <div
-          ref={(el) => {
-            cardRefs.current[product.id] = el;
-          }}
-          key={product.id}
-          className=" rounded-lg p-4 m-4  cursor-pointer w-65 h-full flex flex-col  justify-between shadow-lg transition-all duration-300 ease-out"
-        >
-          <Image
-            src={product.images?.[0]}
-            alt={product.title}
-            width={300}
-            height={300}
-            className="object-cover  h-[345px] w-full mb-4 "
-          />
-          <div className="text-left ">
-            <h3 className="text-md epunda-slab-medium mb-2">{product.title}</h3>
-            {/* <p className="text-gray-600 mb-2 line-clamp-2">
-              {product.description}
-            </p> */}
+        <Link key={product.id} href={`/productInfo/${product.id}`} className="mt-8">
+          <div
+            ref={(el) => {
+              cardRefs.current[product.id] = el;
+            }}
+            key={product.id}
+            className=" rounded-lg p-4 m-2 cursor-pointer w-55 h-full flex flex-col  justify-between shadow-lg transition-all duration-300 ease-out"
+          >
+            <Image
+              src={product.images?.[0]}
+              alt={product.title}
+              width={300}
+              height={300}
+              className="object-cover   h-[245px] w-full mb-4 "
+            />
+            <div className="text-left ">
+              <h3 className="text-md epunda-slab-medium mb-2">{product.title}</h3>
+              {/* <p className="text-gray-600 mb-2 line-clamp-2">
+                {product.description}
+              </p> */}
+            </div>
+            <p className="text-md epunda-slab-light text-gray-700">₹{product.price}</p>
           </div>
-          <p className="text-md epunda-slab-light  text-gray-700">₹{product.price}</p>
-        </div>
+        </Link>
       ))}
     </div>
   );

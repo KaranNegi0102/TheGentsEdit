@@ -123,10 +123,13 @@ export default function ProductInfo() {
         </div>
         {/* product information part */}
         <div className="flex-1 max-w-sm space-y-4">
-          <h1 className="text-3xl epunda-slab-medium leading-tight">
+            <p className="text-lg epunda-slab-light text-gray-600">
+            {product.brand}
+            </p>
+          <h1 className="text-3xl epunda-slab-medium text-gray-800  leading-tight">
             {product.title}
           </h1>
-          <p className="text-2xl epunda-slab-light text-gray-800">
+          <p className="text-2xl epunda-slab-light mt-8 text-gray-800">
             ₹{product.price}
           </p>
           <p className="epunda-slab-light leading-relaxed text-gray-700 text-sm">
@@ -134,10 +137,7 @@ export default function ProductInfo() {
           </p>
           <div className="space-y-2">
             <p className="text-lg epunda-slab-light text-green-600">
-              In STOCK -- {product.stock_quantity} units available
-            </p>
-            <p className="text-lg epunda-slab-light text-gray-600">
-              Brand: {product.brand}
+              In STOCK 
             </p>
           </div>
           <button
@@ -171,19 +171,13 @@ export default function ProductInfo() {
           <div className="p-6">
             <div className="space-y-3 text-gray-700 epunda-slab-light leading-relaxed text-sm">
               <p>
-                An e-commerce website is an online platform that facilitates the
-                buying and selling of products or services over the internet. It
-                serves as a virtual marketplace where businesses and individuals
-                showcase their products, interact with customers, and conduct
-                transactions without the need for a physical presence.
-                E-commerce websites have gained immense popularity due to their
-                convenience, accessibility, and the global reach they offer.
+              {product.brand} <br /> 
+              </p>
+              <p className="text-2xl epunda-slab-medium">
+              {product.title}
               </p>
               <p>
-                E-commerce websites typically display products or services along
-                with detailed descriptions, images, prices, and any available
-                variations (e.g., sizes, colors). Each product usually has its
-                own dedicated page with relevant information.
+              {product.description}
               </p>
             </div>
           </div>

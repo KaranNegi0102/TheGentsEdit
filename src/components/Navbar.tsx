@@ -4,6 +4,7 @@ import logo from "../../public/logo.png";
 import Image from "next/image";
 import AuthModal from "./AuthModal";
 import Link from "next/link";
+import { ShoppingCart , User } from "lucide-react";
 
 import { useAppSelector } from "@/app/hooks/hooks";
 // import { fetchUserData } from "@/app/redux/slices/authSlice";
@@ -11,9 +12,11 @@ import { useAppSelector } from "@/app/hooks/hooks";
 export default function Navbar() {
   // const dispatch = useAppDispatch();
   const { isLoggedIn } = useAppSelector((state) => state.auth);
+  const { items } = useAppSelector((state) => state.cart);
 
+  console.log("this is in navbar", items);
 
-// noteee-----------------------------------------------------------------------
+  // noteee-----------------------------------------------------------------------
   // the part below i did for testing and for checking for my product slice output nothing important and am not removing it so that if i see the code later i can remember why i did this stupidiy Thank you for understanding
   // const { products, status } = useAppSelector((state) => state.products);
 
@@ -26,8 +29,6 @@ export default function Navbar() {
   //   dispatch(fetchUserData());
   // }, [dispatch]);
   // note-----------------------------------------------------------------------------
-
-
 
   const [openModal, setOpenModal] = useState<"login" | "register" | null>(null);
 
@@ -71,24 +72,29 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
-        <div className="epunda-slab-medium  flex flex-row gap-2">
-          <ul className="flex space-x-7">
+        <div className="epunda-slab-medium mr-8 flex flex-row gap-2">
+          <ul className="flex space-x-7 ">
             {isLoggedIn ? (
               <>
                 <li className="relative">
                   <Link
                     href="/Profile"
-                    className="text-gray-700 font-bold after:content-[''] after:absolute after:left-2 after:-bottom-1 after:w-11 after:h-[2px] after:bg-gray-800 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+                    className="text-gray-700  font-bold hover:text-white"
                   >
-                    PROFILE
+                    <User size={28} className="hover:bg-gray-700 hover:rounded-md "/>
                   </Link>
                 </li>
                 <li className="relative">
                   <Link
                     href="/Cart"
-                    className="text-gray-700 font-bold after:content-[''] after:absolute after:left-2 after:-bottom-1 after:w-11 after:h-[2px] after:bg-gray-800 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+                    className="text-gray-700 font-bold relative"
                   >
-                    CART
+                    <ShoppingCart size={28}  />
+                    {items.length > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-black  text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                        {items.length}
+                      </span>
+                    )}
                   </Link>
                 </li>
               </>
