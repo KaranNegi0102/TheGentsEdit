@@ -18,7 +18,7 @@ const Cart = () => {
 
   // Local state for immediate UI updates
   const [localCartItems, setLocalCartItems] = useState(cartItems);
-  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);   //mainly use kra gya h taki jab multiple increment ho toh wait hpkar ek baari me saari quantity jaaye
 
   console.log("this is my items list", cartItems);
 

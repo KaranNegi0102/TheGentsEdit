@@ -47,13 +47,13 @@ export default function CollectionCard() {
             href={`/productInfo/${product.id}`}
             className=" p-3 cursor-pointer h-full flex flex-col  "
           >
-            <div className="overflow-hidden">
+            <div className="overflow-hidden ">
               <Image
                 src={product?.images?.[0]}
                 alt={product.title}
                 width={300}
                 height={300}
-                className="object-cover h-[400px] transition-transform duration-300 ease-in-out hover:scale-110"
+                className="object-cover w-full h-[400px] transition-transform duration-300 ease-in-out hover:scale-110"
               />
             </div>
 

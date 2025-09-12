@@ -85,7 +85,7 @@ export default function Home() {
             Fresh Styles, New Trends – Explore Our Latest Collections!
           </h2>
         </div>
-        <ProductCard />
+        <ProductCard type="latest" />
       </div>
 
       {/* best seller wala section */}
@@ -96,7 +96,7 @@ export default function Home() {
           </h1>
           <h2>Most Loved, Most Wanted – Shop Our Best Sellers!</h2>
         </div>
-        <ProductCard />
+        <ProductCard type="bestSeller" />
       </div>
 
       {/* triple sextions */}
