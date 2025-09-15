@@ -1,5 +1,5 @@
 // src/app/redux/slices/cartSlice.ts
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface CartItem {
@@ -85,7 +85,37 @@ export const updateCartItem = createAsyncThunk(
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    // // ✅ Optimistic update reducer
+    // addToCartOptimistic: (
+    //   state,
+    //   action: PayloadAction<{
+    //     productId: number;
+    //     title: string;
+    //     price: number;
+    //     description?: string;
+    //     images?: string[];
+    //   }>
+    // ) => {
+    //   const existing = state.items.find(
+    //     (item) => item.productId === action.payload.productId
+    //   );
+
+    //   if (existing) {
+    //     existing.quantity += 1;
+    //   } else {
+    //     state.items.push({
+    //       id: Date.now(), // temporary id until backend returns real one
+    //       productId: action.payload.productId,
+    //       quantity: 1,
+    //       title: action.payload.title,
+    //       price: action.payload.price,
+    //       description: action.payload.description || "",
+    //       images: action.payload.images || [],
+    //     });
+    //   }
+    // },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCart.pending, (state) => {
@@ -108,10 +138,14 @@ const cartSlice = createSlice({
         );
       })
       .addCase(updateCartItem.fulfilled, (state, action) => {
-        // Refetch cart to get updated product details
-        state.status = "loading";
+        const updated = action.payload;
+        const idx = state.items.findIndex(
+          (item) => item.productId === updated.productId
+        );
+        if (idx >= 0) state.items[idx] = updated;
       });
   },
 });
 
+export const { addToCartOptimistic } = cartSlice.actions;
 export default cartSlice.reducer;

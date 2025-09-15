@@ -4,7 +4,7 @@ import logo from "../../public/logo.png";
 import Image from "next/image";
 import AuthModal from "./AuthModal";
 import Link from "next/link";
-import { ShoppingCart , User } from "lucide-react";
+import { ShoppingCart, User, Heart } from "lucide-react";
 
 import { useAppSelector } from "@/app/hooks/hooks";
 // import { fetchUserData } from "@/app/redux/slices/authSlice";
@@ -76,20 +76,46 @@ export default function Navbar() {
           <ul className="flex space-x-7 ">
             {isLoggedIn ? (
               <>
-                <li className="relative">
+                <li className="relative group">
                   <Link
                     href="/Profile"
-                    className="text-gray-700  font-bold hover:text-white"
+                    className="text-gray-700 font-bold hover:text-white"
                   >
-                    <User size={28} className="hover:bg-gray-700 hover:rounded-md "/>
-                  </Link>
+                    <User
+                      size={28}
+                      className="hover:bg-gray-700 hover:p-1 hover:rounded-md"
+                    />
+                  </Link> 
+
+                   {/* Tooltip */}
+                   <div className="absolute top-9 right-3 transform translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-50">
+                    Profile
+                  </div>
                 </li>
+
+                <li className="relative group">
+                  <Link
+                    href="/Wishlist"
+                    className="text-gray-700 font-bold hover:text-white"
+                  >
+                    <Heart
+                      size={28}
+                      className="hover:bg-gray-700 hover:p-1 hover:rounded-md"
+                    />
+                  </Link>
+
+                  {/* Tooltip */}
+                  <div className="absolute    transform top-9 right-3 translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-50">
+                    Wishlist
+                  </div>
+                </li>
+
                 <li className="relative">
                   <Link
                     href="/Cart"
-                    className="text-gray-700 font-bold relative"
+                    className="text-gray-700 font-bold relative "
                   >
-                    <ShoppingCart size={28}  />
+                    <ShoppingCart size={28} className="hover:bg-gray-700 hover:p-1 hover:rounded-md hover:text-white"/>
                     {items.length > 0 && (
                       <span className="absolute -top-2 -right-2 bg-black  text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                         {items.length}

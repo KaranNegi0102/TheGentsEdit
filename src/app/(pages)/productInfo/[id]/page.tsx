@@ -26,6 +26,7 @@ export default function ProductInfo() {
   // const [product, setProduct] = useState<Product | null>(null);
   // const [mainImage, setMainImage] = useState<string>("/logo.png");
   const { userData } = useAppSelector((state) => state.auth);
+  const { items: cartItems } = useAppSelector((state) => state.cart);
   const { id } = useParams(); // product id from /product/[id]
   const productId = Number(id);
   const dispatch = useAppDispatch();
@@ -68,6 +69,8 @@ export default function ProductInfo() {
 
     dispatch(addToCart({ userId: userData.id, productId }));
     alert("Added to cart!");
+
+    dispatch(fetchCart(userData.id));
   };
 
   // needed to update this below part
@@ -123,9 +126,9 @@ export default function ProductInfo() {
         </div>
         {/* product information part */}
         <div className="flex-1 max-w-sm space-y-4">
-            <p className="text-lg epunda-slab-light text-gray-600">
+          <p className="text-lg epunda-slab-light text-gray-600">
             {product.brand}
-            </p>
+          </p>
           <h1 className="text-3xl epunda-slab-medium text-gray-800  leading-tight">
             {product.title}
           </h1>
@@ -136,15 +139,22 @@ export default function ProductInfo() {
             {product.description}
           </p>
           <div className="space-y-2">
-            <p className="text-lg epunda-slab-light text-green-600">
-              In STOCK 
-            </p>
+            <p className="text-lg epunda-slab-light text-green-600">In STOCK</p>
           </div>
           <button
             onClick={handleAddToCart}
-            className="w-full bg-black text-white py-2 px-4 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors duration-200 font-medium"
+            disabled={cartItems.some(
+              (cartItem) => cartItem.productId === product.id
+            )}
+            className={`w-full py-2 px-4 rounded-lg cursor-pointer transition-colors duration-200 font-medium ${
+              cartItems.some((cartItem) => cartItem.productId === product.id)
+                ? "bg-gray-400 text-white cursor-not-allowed"
+                : "bg-black text-white hover:bg-gray-800"
+            }`}
           >
-            Add to Cart
+            {cartItems.some((cartItem) => cartItem.productId === product.id)
+              ? "Added"
+              : "Add to Cart"}
           </button>
           <div className="text-xs epunda-slab-light text-gray-500 leading-relaxed space-y-1">
             <p>✓ 100% Original product</p>
@@ -171,14 +181,10 @@ export default function ProductInfo() {
           <div className="p-6">
             <div className="space-y-3 text-gray-700 epunda-slab-light leading-relaxed text-sm">
               <p>
-              {product.brand} <br /> 
+                {product.brand} <br />
               </p>
-              <p className="text-2xl epunda-slab-medium">
-              {product.title}
-              </p>
-              <p>
-              {product.description}
-              </p>
+              <p className="text-2xl epunda-slab-medium">{product.title}</p>
+              <p>{product.description}</p>
             </div>
           </div>
         </div>

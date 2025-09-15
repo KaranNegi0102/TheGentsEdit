@@ -11,13 +11,26 @@ import {
   updateCartItem,
 } from "@/app/redux/slices/cartSlice";
 
+
+interface CartItemType {
+  id: number;
+  productId: number;
+  title: string;
+  price: number;
+  quantity: number;
+  images: string[];
+  description?: string;
+}
+
+
+
 const Cart = () => {
   const dispatch = useAppDispatch();
   const { userData } = useAppSelector((state) => state.auth);
   const { items: cartItems, status } = useAppSelector((state) => state.cart);
 
   // Local state for immediate UI updates
-  const [localCartItems, setLocalCartItems] = useState(cartItems);
+  const [localCartItems, setLocalCartItems] = useState<CartItemType[]>(cartItems || []);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);   //mainly use kra gya h taki jab multiple increment ho toh wait hpkar ek baari me saari quantity jaaye
 
   console.log("this is my items list", cartItems);
@@ -32,6 +45,10 @@ const Cart = () => {
   // Update local cart items when Redux cart changes
   useEffect(() => {
     setLocalCartItems(cartItems);
+  }, [cartItems]);
+
+  useEffect(() => {
+    setLocalCartItems(cartItems || []);
   }, [cartItems]);
 
   // Cleanup timeout on unmount
@@ -85,10 +102,11 @@ const Cart = () => {
     }
   };
 
-  const subtotal = localCartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const subtotal = (localCartItems || []).reduce(
+  (sum, item) => sum + item.price * item.quantity,
+  0
+  );  
+
   const tax = subtotal * 0.18; // 18% GST
   const total = subtotal + tax;
 
