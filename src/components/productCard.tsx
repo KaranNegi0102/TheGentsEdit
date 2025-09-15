@@ -60,7 +60,7 @@ export default function ProductCard({ type }: ProductCardProps) {
         gsap.to(card, {
           rotateX,
           rotateY,
-          boxShadow: `${shadowX}px ${shadowY}px 40px rgba(0,0,0,0.3), 0 0 60px rgba(249, 193, 72,0.6)`,
+          boxShadow: `${shadowX}px ${shadowY}px 40px rgba(0, 0, 4,0.3), 0 0 60px rgba(0, 0, 4,0.6)`,
           ease: "power2.out",
           duration: 0.4,
         });
@@ -159,7 +159,7 @@ export default function ProductCard({ type }: ProductCardProps) {
               cardRefs.current[product.id] = el;
             }}
             key={product.id}
-            className=" rounded-lg p-4 m-2 cursor-pointer w-55 h-full flex flex-col  justify-between shadow-lg transition-all duration-300 ease-out"
+            className=" rounded-lg p-4 m-2 cursor-pointer w-55 h-full flex flex-col bg-white  justify-between shadow-lg transition-all duration-300 ease-out"
           >
             <Image
               src={product.images?.[0]}

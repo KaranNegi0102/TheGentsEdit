@@ -9,15 +9,106 @@ import {
   MapPin,
   ArrowRight,
 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Footer = () => {
+  const footerRef = useRef<HTMLElement>(null);
+  const footerSectionsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const socialLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
+
+  useEffect(() => {
+    if (footerRef.current) {
+      // Footer entrance animation
+      gsap.fromTo(
+        footerRef.current,
+        {
+          opacity: 0,
+          y: 100,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+
+      // Staggered animation for footer sections
+      const sections = footerSectionsRef.current.filter(Boolean);
+      gsap.fromTo(
+        sections,
+        {
+          opacity: 0,
+          y: 50,
+          scale: 0.95,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top 70%",
+            end: "bottom 30%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+
+      // Social links hover animation
+      socialLinksRef.current.filter(Boolean).forEach((link) => {
+        if (link) {
+          link.addEventListener("mouseenter", () => {
+            gsap.to(link, {
+              scale: 1.2,
+              rotation: 5,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          });
+
+          link.addEventListener("mouseleave", () => {
+            gsap.to(link, {
+              scale: 1,
+              rotation: 0,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          });
+        }
+      });
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
   return (
-    <footer className="bg-[#f5f2e9] text-[#4F4F4D]">
+    <footer ref={footerRef} className="bg-[#f5f2e9] text-[#4F4F4D]">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 py-12 text-[#4F4F4D]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
-          <div className="space-y-4">
+          <div
+            ref={(el) => {
+              footerSectionsRef.current[0] = el;
+            }}
+            className="space-y-4"
+          >
             <div className="flex items-center space-x-2">
               <Image
                 src="/logo.png"
@@ -26,7 +117,6 @@ const Footer = () => {
                 height={170}
                 className="rounded-lg"
               />
-              
             </div>
             <p className="text-sm leading-relaxed">
               Your premier destination for sophisticated men&apos;s fashion. We
@@ -35,18 +125,27 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <Link
+                ref={(el) => {
+                  socialLinksRef.current[0] = el;
+                }}
                 href="#"
                 className=" hover:text-white transition-colors"
               >
                 <Facebook size={20} />
               </Link>
               <Link
+                ref={(el) => {
+                  socialLinksRef.current[1] = el;
+                }}
                 href="#"
                 className=" hover:text-white transition-colors"
               >
                 <Twitter size={20} />
               </Link>
               <Link
+                ref={(el) => {
+                  socialLinksRef.current[2] = el;
+                }}
                 href="#"
                 className=" hover:text-white transition-colors"
               >
@@ -56,7 +155,12 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
+          <div
+            ref={(el) => {
+              footerSectionsRef.current[1] = el;
+            }}
+            className="space-y-4"
+          >
             <h4 className="text-lg font-semibold epunda-slab-medium">
               Quick Links
             </h4>
@@ -113,7 +217,12 @@ const Footer = () => {
           </div>
 
           {/* Customer Service */}
-          <div className="space-y-4">
+          <div
+            ref={(el) => {
+              footerSectionsRef.current[2] = el;
+            }}
+            className="space-y-4"
+          >
             <h4 className="text-lg font-semibold epunda-slab-medium">
               Customer Service
             </h4>
@@ -170,7 +279,12 @@ const Footer = () => {
           </div>
 
           {/* Contact Information */}
-          <div className="space-y-4">
+          <div
+            ref={(el) => {
+              footerSectionsRef.current[3] = el;
+            }}
+            className="space-y-4"
+          >
             <h4 className="text-lg font-semibold epunda-slab-medium">
               Contact Us
             </h4>
@@ -189,9 +303,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail size={18} className="text-gray-400" />
-                <span className=" text-sm">
-                  info@thegentsedit.com
-                </span>
+                <span className=" text-sm">info@thegentsedit.com</span>
               </div>
             </div>
           </div>
