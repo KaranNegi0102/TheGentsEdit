@@ -88,7 +88,7 @@ export default function ProductInfo() {
       : ["/logo.png"];
 
   return (
-    <div className="bg-white text-black">
+    <div className="bg-white mt-17 text-black">
       <Navbar />
       <div className="flex gap-6 p-6 max-w-6xl mx-auto">
         {/* product images part */}

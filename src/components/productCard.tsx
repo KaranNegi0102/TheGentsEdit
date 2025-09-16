@@ -159,7 +159,7 @@ export default function ProductCard({ type }: ProductCardProps) {
               cardRefs.current[product.id] = el;
             }}
             key={product.id}
-            className=" rounded-lg p-4 m-2 cursor-pointer w-55 h-full flex flex-col bg-white  justify-between shadow-lg transition-all duration-300 ease-out"
+            className=" rounded-md p-4 m-2 cursor-pointer w-55 h-full flex flex-col bg-[#490f0f] text-white  justify-between shadow-lg transition-all duration-200 ease-out"
           >
             <Image
               src={product.images?.[0]}
@@ -169,12 +169,12 @@ export default function ProductCard({ type }: ProductCardProps) {
               className="object-cover   h-[245px] w-full mb-4 "
             />
             <div className="text-left ">
-              <h3 className="text-md epunda-slab-medium mb-2">{product.title}</h3>
+              <h3 className="text-md epunda-slab-medium mb-2 line-clamp-1">{product.title}</h3>
               {/* <p className="text-gray-600 mb-2 line-clamp-2">
                 {product.description}
               </p> */}
             </div>
-            <p className="text-md epunda-slab-light text-gray-700">₹{product.price}</p>
+            <p className="text-md epunda-slab-medium ">₹{product.price}</p>
           </div>
         </Link>
       ))}

@@ -174,7 +174,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-50">
       <Navbar />
       {/* yeh landing page ka front wala image and text h */}
       <div className="bg-white p-9 mb-3 ">
@@ -195,7 +195,7 @@ export default function Home() {
               alt="image"
               width={400}
               height={400}
-              className="h-[450px] w-auto object-contain"
+              className="h-[450px] mt-34 w-auto object-contain"
             />
           </div>
 
@@ -214,7 +214,7 @@ export default function Home() {
       </div>
 
       {/* latest wala section */}
-      <div className="relative text-black mt-12 mb-9">
+      <div className="relative text-black mt-20 mb-9">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -229,10 +229,10 @@ export default function Home() {
         <div className="relative z-10 ">
           <div
             ref={arrivalsRef}
-            className="flex flex-col justify-center text-center py-8"
+            className="flex flex-col justify-center text-center py-3"
           >
             <h1 className=" text-3xl epunda-slab-medium">
-              NEW <span className="text-gray-700">ARRIVALS</span>
+              NEW <span className="text-gray-700 ">ARRIVALS</span>
             </h1>
             <h2 className="text-gray-700">
               Fresh Styles, New Trends – Explore Our Latest Collections!

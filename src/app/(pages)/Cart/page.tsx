@@ -10,6 +10,9 @@ import {
   removeFromCart,
   updateCartItem,
 } from "@/app/redux/slices/cartSlice";
+import Link from "next/link"
+import { Trash } from 'lucide-react';
+
 
 
 interface CartItemType {
@@ -111,24 +114,24 @@ const Cart = () => {
   const total = subtotal + tax;
 
   return (
-    <div className="bg-white text-black min-h-screen">
+    <div className="bg-white text-black mt-17 min-h-screen">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <h1 className="text-4xl epunda-slab-medium mb-8 text-[#4F4F4D]">
-          Shopping Cart
+        <h1 className="text-3xl text-center epunda-slab-medium mb-8 text-[#4F4F4D]">
+          My Cart
         </h1>
 
         {localCartItems.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-xl epunda-slab-light text-gray-600 mb-4">
-              Your cart is empty
+              Your cart is looks empty right now.
             </p>
             <a
               href="/collection"
               className="bg-black text-white px-6 py-3 rounded-lg epunda-slab-medium hover:bg-gray-800 transition-colors"
             >
-              Continue Shopping
+              Lets Go For Shopping
             </a>
           </div>
         ) : (
@@ -138,8 +141,9 @@ const Cart = () => {
               {localCartItems.map((item) => (
                 <div
                   key={item.id}
-                  className="border border-gray-200 rounded-lg p-6 flex gap-4"
+                  className="border border-gray-200 bg-gray-100 rounded-lg p-6 flex gap-4"
                 >
+                  <Link href={`/productInfo/${item.productId}`}>
                   <Image
                     src={item.images?.[0]}
                     alt={item.title}
@@ -147,11 +151,15 @@ const Cart = () => {
                     height={120}
                     className="object-cover rounded"
                   />
+                  </Link>
+                  
 
                   <div className="flex-1">
-                    <h3 className="text-xl epunda-slab-medium mb-2">
+                    <Link href={`/productInfo/${item.productId}`}>
+                    <h3 className="text-xl text-gray-800 epunda-slab-medium mb-2">
                       {item.title}
                     </h3>
+                    </Link>
                     <p className="text-gray-600 epunda-slab-light mb-3 text-sm line-clamp-2">
                       {item.description}
                     </p>
@@ -159,13 +167,13 @@ const Cart = () => {
                       ₹{item.price}
                     </p>
 
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center border border-gray-300 rounded">
+                    <div className="flex items-center gap-4 ">
+                      <div className="flex items-center border bg-white border-gray-300 rounded">
                         <button
                           onClick={() =>
                             updateQuantity(item.productId, item.quantity - 1)
                           }
-                          className="px-3 py-2 hover:bg-gray-100 transition-colors"
+                          className="px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors"
                         >
                           -
                         </button>
@@ -176,7 +184,7 @@ const Cart = () => {
                           onClick={() =>
                             updateQuantity(item.productId, item.quantity + 1)
                           }
-                          className="px-3 py-2 hover:bg-gray-100 transition-colors"
+                          className="px-3 py-2 hover:bg-gray-100 cursor-pointer transition-colors"
                         >
                           +
                         </button>
@@ -184,9 +192,9 @@ const Cart = () => {
 
                       <button
                         onClick={() => removeItem(item.productId)}
-                        className="text-red-600 hover:text-red-800 epunda-slab-light text-sm underline"
+                        className="text-red-600 hover:text-red-800 cursor-pointer epunda-slab-light text-sm underline"
                       >
-                        Remove
+                        <Trash/>
                       </button>
                     </div>
                   </div>
@@ -197,6 +205,8 @@ const Cart = () => {
                     </p>
                   </div>
                 </div>
+               
+
               ))}
             </div>
 

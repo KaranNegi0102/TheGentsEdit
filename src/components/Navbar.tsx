@@ -6,6 +6,7 @@ import AuthModal from "./AuthModal";
 import Link from "next/link";
 import { ShoppingCart, User, Heart } from "lucide-react";
 import gsap from "gsap";
+import { usePathname } from "next/navigation"; 
 
 import { useAppSelector } from "@/app/hooks/hooks";
 // import { fetchUserData } from "@/app/redux/slices/authSlice";
@@ -14,6 +15,7 @@ export default function Navbar() {
   // const dispatch = useAppDispatch();
   const { isLoggedIn } = useAppSelector((state) => state.auth);
   const { items } = useAppSelector((state) => state.cart);
+  const pathname = usePathname();
 
   const navbarRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
@@ -24,6 +26,7 @@ export default function Navbar() {
 
   
   const [openModal, setOpenModal] = useState<"login" | "register" | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   
   useEffect(() => {
     // Navbar entrance animation
@@ -98,6 +101,19 @@ export default function Navbar() {
     });
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
 
   
   // noteee-----------------------------------------------------------------------
@@ -118,7 +134,11 @@ export default function Navbar() {
     <>
       <div
         ref={navbarRef}
-        className="flex flex-row text-[#4F4F4D] bg-white justify-between items-center p-4"
+        className={`fixed top-0 left-0 w-full z-50 flex flex-row justify-between items-center p-4 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/40 backdrop-blur-lg "
+            : "bg-white"
+        }`}
       >
         <div ref={logoRef}>
           <Image
@@ -139,8 +159,10 @@ export default function Navbar() {
             >
               <Link
                 href="/"
-                className="text-gray-700 font-bold after:content-[''] after:absolute after:left-2 after:-bottom-1 after:w-7.5 after:h-[2px] after:bg-gray-800 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-              >
+                className={`text-gray-700 font-bold relative after:content-[''] after:absolute after:left-2 after:-bottom-1 after:h-[2px] after:bg-gray-800 after:transition-transform after:duration-300 ${
+                  pathname === "/" ? "after:w-9.5 after:scale-x-100" : "after:w-9.5 after:scale-x-0 hover:after:scale-x-100"
+                }`}
+                >
                 HOME
               </Link>
             </li>
@@ -152,8 +174,9 @@ export default function Navbar() {
             >
               <Link
                 href="/collection"
-                className="text-gray-700 font-bold after:content-[''] after:absolute after:left-2 after:-bottom-1 after:w-22 after:h-[2px] after:bg-gray-800 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-              >
+                className={`text-gray-700 font-bold relative after:content-[''] after:absolute after:left-2 after:-bottom-1 after:h-[2px] after:bg-gray-800 after:transition-transform after:duration-300 ${
+                  pathname === "/collection" ? "after:w-23.5 after:scale-x-100" : "after:w-23.5 after:scale-x-0 hover:after:scale-x-100"
+                }`}              >
                 COLLECTION
               </Link>
             </li>
@@ -165,8 +188,9 @@ export default function Navbar() {
             >
               <Link
                 href="/AboutUs"
-                className="text-gray-700 font-bold after:content-[''] after:absolute after:left-2 after:-bottom-1 after:w-15 after:h-[2px] after:bg-gray-800 after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-              >
+                className={`text-gray-700 font-bold relative after:content-[''] after:absolute after:left-2 after:-bottom-1 after:h-[2px] after:bg-gray-800 after:transition-transform after:duration-300 ${
+                  pathname === "/AboutUs" ? "after:w-16.5 after:scale-x-100" : "after:w-16.5 after:scale-x-0 hover:after:scale-x-100"
+                }`}              >
                 ABOUT US
               </Link>
             </li>

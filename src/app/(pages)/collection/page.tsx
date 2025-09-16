@@ -23,9 +23,9 @@ export default function Collection() {
 
 
   return (
-   <div className="bg-white">
+   <div className="bg-white mt-17">
       <Navbar />
-      <div className="items-center text-center  text-black">
+      <div className="items-center text-center text-black">
         <div className="flex mt-9 text-gray-700">
           {/* filter sidebar */}
           <div className="flex-1  h-full p-4">

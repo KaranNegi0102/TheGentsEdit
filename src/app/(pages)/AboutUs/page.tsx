@@ -3,7 +3,7 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Image from "next/image";
-import rightSideImage from "../../../../public/RightSideImage.jpg";
+import rightSideImage from "../../../../public/menSuit.jpeg";
 import exchangeLogo from "../../../../public/exchangeLogo.png";
 import returnLogo from "../../../../public/returnlogo.png";
 import policyLogo from "../../../../public/policylogo.png";
@@ -11,7 +11,7 @@ import policyLogo from "../../../../public/policylogo.png";
 
 export default function AboutUs() {
   return (
-    <div className="bg-white">
+    <div className="bg-white mt-16">
       <Navbar />
 
       {/* Hero Section */}

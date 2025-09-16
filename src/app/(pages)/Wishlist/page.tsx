@@ -137,7 +137,7 @@ const Wishlist = () => {
 
   if (status === "loading") {
     return (
-      <div className="bg-white text-black min-h-screen">
+      <div className="bg-white  text-black min-h-screen">
         <Navbar />
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex justify-center items-center h-64">
@@ -177,7 +177,7 @@ const Wishlist = () => {
   }
 
   return (
-    <div className="bg-white text-black min-h-screen">
+    <div className="bg-white mt-17 text-black min-h-screen">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-6 py-8">

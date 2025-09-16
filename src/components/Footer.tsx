@@ -98,7 +98,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer ref={footerRef} className="bg-[#f5f2e9] text-[#4F4F4D]">
+    <footer ref={footerRef} className="bg-gray-50 text-[#4F4F4D]">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 py-12 text-[#4F4F4D]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -129,7 +129,7 @@ const Footer = () => {
                   socialLinksRef.current[0] = el;
                 }}
                 href="#"
-                className=" hover:text-white transition-colors"
+                className=" hover:text-blue-500 transition-colors"
               >
                 <Facebook size={20} />
               </Link>
@@ -138,7 +138,7 @@ const Footer = () => {
                   socialLinksRef.current[1] = el;
                 }}
                 href="#"
-                className=" hover:text-white transition-colors"
+                className=" hover:text-blue-800 transition-colors"
               >
                 <Twitter size={20} />
               </Link>
@@ -147,7 +147,7 @@ const Footer = () => {
                   socialLinksRef.current[2] = el;
                 }}
                 href="#"
-                className=" hover:text-white transition-colors"
+                className=" hover:text-pink-800 transition-colors"
               >
                 <Instagram size={20} />
               </Link>
@@ -168,7 +168,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/"
-                  className=" hover:text-white transition-colors flex items-center group"
+                  className=" hover:text-gray-950 transition-colors flex items-center group"
                 >
                   <ArrowRight
                     size={16}
@@ -180,7 +180,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/collections"
-                  className=" hover:text-white transition-colors flex items-center group"
+                  className=" hover:text-gray-950 transition-colors flex items-center group"
                 >
                   <ArrowRight
                     size={16}
@@ -192,7 +192,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/best-sellers"
-                  className=" hover:text-white transition-colors flex items-center group"
+                  className=" hover:text-gray-950 transition-colors flex items-center group"
                 >
                   <ArrowRight
                     size={16}
@@ -204,7 +204,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/about"
-                  className=" hover:text-white transition-colors flex items-center group"
+                  className=" hover:text-gray-950 transition-colors flex items-center group"
                 >
                   <ArrowRight
                     size={16}
@@ -230,7 +230,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/exchange-policy"
-                  className=" hover:text-white transition-colors flex items-center group"
+                  className=" hover:text-gray-950 transition-colors flex items-center group"
                 >
                   <ArrowRight
                     size={16}
@@ -242,7 +242,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/return-policy"
-                  className=" hover:text-white transition-colors flex items-center group"
+                  className=" hover:text-gray-950 transition-colors flex items-center group"
                 >
                   <ArrowRight
                     size={16}
@@ -254,7 +254,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/shipping"
-                  className=" hover:text-white transition-colors flex items-center group"
+                  className=" hover:text-gray-950 transition-colors flex items-center group"
                 >
                   <ArrowRight
                     size={16}
@@ -266,7 +266,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/size-guide"
-                  className=" hover:text-white transition-colors flex items-center group"
+                  className=" hover:text-gray-950 transition-colors flex items-center group"
                 >
                   <ArrowRight
                     size={16}
@@ -294,7 +294,7 @@ const Footer = () => {
                 <span className=" text-sm">
                   123 Home Sweet Home
                   <br />
-                  Greater Naveda , 201310
+                  Greater Noida , <br /> Behind Sharda University  , 201310
                 </span>
               </div>
               <div className="flex items-center space-x-3">
@@ -311,7 +311,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="bg-gray-950 py-6">
+      <div className="bg-gray-50 py-6">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-sm">
@@ -320,19 +320,19 @@ const Footer = () => {
             <div className="flex space-x-6 text-sm">
               <Link
                 href="/privacy"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-gray-950 transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-gray-950 transition-colors"
               >
                 Terms of Service
               </Link>
               <Link
                 href="/cookies"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-gray-950 transition-colors"
               >
                 Cookie Policy
               </Link>
