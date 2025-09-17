@@ -207,7 +207,7 @@ export default function AboutUs() {
               Explore Collection
             </a>
             <a
-              href="/Contact"
+              href="#"
               className="border-2 epunda-slab-light border-gray-800 text-gray-800 px-8 py-3 rounded-lg epunda-slab-medium hover:bg-gray-800 hover:text-white transition-colors"
             >
               Get in Touch

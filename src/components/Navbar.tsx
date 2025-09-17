@@ -22,7 +22,7 @@ export default function Navbar() {
   const navLinksRef = useRef<(HTMLLIElement | null)[]>([]);
   const authLinksRef = useRef<(HTMLLIElement | null)[]>([]);
 
-  console.log("this is in navbar", items);
+  // console.log("this is in navbar", items);
 
   
   const [openModal, setOpenModal] = useState<"login" | "register" | null>(null);
@@ -136,7 +136,7 @@ export default function Navbar() {
         ref={navbarRef}
         className={`fixed top-0 left-0 w-full z-50 flex flex-row justify-between items-center p-4 transition-all duration-300 ${
           scrolled
-            ? "bg-white/40 backdrop-blur-lg "
+            ? "bg-white/90 backdrop-blur-xs "
             : "bg-white"
         }`}
       >

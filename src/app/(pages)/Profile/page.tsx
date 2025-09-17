@@ -1,27 +1,31 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAppSelector } from "@/app/hooks/hooks";
+import { useAppSelector, useAppDispatch } from "@/app/hooks/hooks";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "../../../../public/logo.png";
 import axios from "axios";
+import Navbar from "@/components/Navbar";
+import { fetchUserData } from "@/app/redux/slices/authSlice";
+import Link from "next/link";
 
 export default function ProfilePage() {
+  const dispatch = useAppDispatch();
   const router = useRouter();
+
   const { isLoggedIn, userData, loading } = useAppSelector(
     (state) => state.auth
   );
 
-
   const [isEditing, setIsEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [editForm, setEditForm] = useState({
     name: "",
     email: "",
     phone_number: "",
     address: "",
   });
-
 
   useEffect(() => {
     if (userData) {
@@ -34,20 +38,14 @@ export default function ProfilePage() {
     }
   }, [userData]);
 
-
-
   const handleLogout = async () => {
-   try{
-    await axios.post("/api/auth/logout",{},
-      {withCredentials:true});
+    try {
+      await axios.post("/api/auth/logout", {}, { withCredentials: true });
       router.push("/");
+    } catch (error) {
+      console.log(error);
     }
-   catch(error){
-      console.log(error)
-   }
   };
-
-
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -65,10 +63,19 @@ export default function ProfilePage() {
 
   const handleSaveChanges = async () => {
     try {
-      console.log("Saving changes:", editForm);
+      console.log("saving changes", editForm);
+      const res = await axios.put("/api/updateProfile", editForm, {
+        withCredentials: true,
+      });
+      // console.log(response)
+      dispatch(fetchUserData());
+      setEditForm(res.data.userData);
       setIsEditing(false);
+      alert("profile updated")
     } catch (error) {
       console.error("Error updating profile:", error);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -84,17 +91,19 @@ export default function ProfilePage() {
     setIsEditing(false);
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#f5f2e9] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4F4F4D] mx-auto mb-4"></div>
-          <p className="epunda-slab-light text-[#4F4F4D]">Loading profile...</p>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-[#f5f2e9] flex items-center justify-center">
+  //       <div className="text-center">
+  //         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4F4F4D] mx-auto mb-4"></div>
+  //         <p className="epunda-slab-light text-[#4F4F4D]">Loading profile...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
+
+  // jab middleware lagega tab yeh hata dunga
   if (!isLoggedIn || !userData) {
     return (
       <div className="min-h-screen bg-[#f5f2e9] flex items-center justify-center">
@@ -121,22 +130,23 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f2e9]">
+    <div className="min-h-screen bg-white">
+      <Navbar />
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-white mt-16 shadow-sm border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="epunda-slab-medium text-3xl text-[#4F4F4D]">
-                My Profile
+              <h1 className="epunda-slab-medium text-3xl text-gray-700">
+                Profile
               </h1>
-              <p className="epunda-slab-light text-gray-600 mt-1">
+              <p className="epunda-slab-light text-gray-500 mt-1">
                 Manage your account information
               </p>
             </div>
             <button
               onClick={handleLogout}
-              className="epunda-slab-medium bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
+              className="epunda-slab-medium bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 cursor-pointer transition-colors"
             >
               Logout
             </button>
@@ -148,7 +158,7 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           {/* Profile Header */}
-          <div className="bg-gradient-to-r from-[#4F4F4D] to-[#3a3a38] px-6 py-8 text-white">
+          <div className="bg-gray-700 px-6 py-8 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center">
@@ -167,7 +177,7 @@ export default function ProfilePage() {
               </div>
               <button
                 onClick={handleEditToggle}
-                className="epunda-slab-medium bg-white text-[#4F4F4D] px-4 py-2 rounded hover:bg-gray-100 transition-colors"
+                className="epunda-slab-medium bg-white text-[#4F4F4D] px-4 py-2 rounded cursor-pointer hover:bg-gray-100 transition-colors"
               >
                 {isEditing ? "Cancel" : "Edit Profile"}
               </button>
@@ -291,15 +301,20 @@ export default function ProfilePage() {
               <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
                 <button
                   onClick={handleCancelEdit}
-                  className="epunda-slab-medium bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition-colors"
+                  className="epunda-slab-medium cursor-pointer bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveChanges}
-                  className="epunda-slab-medium bg-[#4F4F4D] text-white px-6 py-2 rounded hover:bg-[#3a3a38] transition-colors"
+                  disabled={saving}
+                  className="epunda-slab-medium bg-[#4F4F4D] cursor-pointer text-white px-6 py-2 rounded hover:bg-[#3a3a38] transition-colors"
                 >
-                  Save Changes
+                  {saving ? (
+                    "Saving......"
+                  ) : (
+                    "Save Changes"
+                  )}
                 </button>
               </div>
             )}
@@ -333,6 +348,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition-shadow cursor-pointer">
+          <Link href="/Wishlist">
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
                 className="w-6 h-6 text-green-600"
@@ -349,17 +365,18 @@ export default function ProfilePage() {
               </svg>
             </div>
             <h3 className="epunda-slab-medium text-lg text-[#4F4F4D] mb-2">
-              Wishlist
+                Wishlist
             </h3>
             <p className="epunda-slab-light text-gray-600 text-sm">
               Your saved items
             </p>
+            </Link>
           </div>
-
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition-shadow cursor-pointer">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Link href="/AboutUs">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
-                className="w-6 h-6 text-purple-600"
+                className="w-6 h-6 text-green-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -368,16 +385,17 @@ export default function ProfilePage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 />
               </svg>
             </div>
             <h3 className="epunda-slab-medium text-lg text-[#4F4F4D] mb-2">
-              Support
+                Support
             </h3>
             <p className="epunda-slab-light text-gray-600 text-sm">
-              Get help and support
+            Get help and support
             </p>
+            </Link>
           </div>
         </div>
       </div>
