@@ -14,7 +14,6 @@ import Link from "next/link"
 import { Trash } from 'lucide-react';
 
 
-
 interface CartItemType {
   id: number;
   productId: number;
@@ -24,7 +23,6 @@ interface CartItemType {
   images: string[];
   description?: string;
 }
-
 
 
 const Cart = () => {
@@ -245,9 +243,12 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <button className="w-full bg-black text-white py-3 rounded-lg epunda-slab-medium hover:bg-gray-800 transition-colors mb-4">
-                  Proceed to Checkout
-                </button>
+
+                <Link href="/PlaceOrder">
+                  <button className="w-full bg-black text-white py-3 rounded-lg epunda-slab-medium hover:bg-gray-800 transition-colors mb-4">
+                    Proceed to Checkout
+                  </button>
+                </Link>
 
                 <div className="text-sm epunda-slab-light text-gray-600 space-y-2">
                   <p>✓ Free delivery on orders above ₹49</p>

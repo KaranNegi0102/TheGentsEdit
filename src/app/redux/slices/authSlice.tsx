@@ -1,6 +1,6 @@
 "use client";
 
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface USER_DATA_TYPE {
@@ -51,12 +51,6 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<USER_DATA_TYPE>) => {
-      state.isLoggedIn = true;
-      state.userData = action.payload;
-      state.loading = false;
-    },
-
     logout: (state) => {
       state.isLoggedIn = false;
       state.userData = null;
@@ -84,5 +78,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

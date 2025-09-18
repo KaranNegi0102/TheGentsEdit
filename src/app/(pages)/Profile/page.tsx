@@ -7,7 +7,7 @@ import Image from "next/image";
 import logo from "../../../../public/logo.png";
 import axios from "axios";
 import Navbar from "@/components/Navbar";
-import { fetchUserData } from "@/app/redux/slices/authSlice";
+import { fetchUserData , logout } from "@/app/redux/slices/authSlice";
 import Link from "next/link";
 
 export default function ProfilePage() {
@@ -40,7 +40,8 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/api/auth/logout", {}, { withCredentials: true });
+      await axios.get("/api/auth/logout");
+      dispatch(logout());
       router.push("/");
     } catch (error) {
       console.log(error);
@@ -324,8 +325,9 @@ export default function ProfilePage() {
         {/* Quick Actions */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition-shadow cursor-pointer">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg
+          <Link href="/orders">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
                 className="w-6 h-6 text-blue-600"
                 fill="none"
                 stroke="currentColor"
@@ -345,8 +347,8 @@ export default function ProfilePage() {
             <p className="epunda-slab-light text-gray-600 text-sm">
               View your past orders
             </p>
+            </Link>
           </div>
-
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition-shadow cursor-pointer">
           <Link href="/Wishlist">
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -372,6 +374,7 @@ export default function ProfilePage() {
             </p>
             </Link>
           </div>
+
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition-shadow cursor-pointer">
           <Link href="/AboutUs">
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">

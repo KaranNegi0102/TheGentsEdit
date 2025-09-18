@@ -28,7 +28,7 @@ export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async (userId: number) => {
     const response = await axios.get(`/api/cart/${userId}`); //user id merko init auth me jaha call kra h waha se arhi h ik u guys gonna ask
-    console.log("this is my response in cart slice", response);
+    // console.log("this is my response in cart slice", response);
     // return response.data.cart as CartItem[];
     return response.data.cart.map((item: any) => ({
       id: item.id, // cart row id (can keep)
@@ -49,7 +49,7 @@ export const addToCart = createAsyncThunk(
       productId,
       quantity: 1,
     });
-    return response.data;
+    return response.data.cartItem;
   }
 );
 
@@ -147,5 +147,4 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCartOptimistic } = cartSlice.actions;
 export default cartSlice.reducer;

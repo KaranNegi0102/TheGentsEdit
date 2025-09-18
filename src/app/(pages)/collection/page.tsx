@@ -37,10 +37,11 @@ export default function Collection() {
               <div className="flex flex-col epunda-slab-light space-y-2  p-3">
                 <h2 className="text-xl epunda-slab-medium mb-2 text-left">Type</h2>
                 {["Topwear", "Bottomwear", "Footwear"].map((type) => (
-                  <label key={type} className="flex text-2xl  cursor-pointer items-center ">
+                  <label key={type} className="flex items-center gap-2 text-xl cursor-pointer select-none 
+                        transform transition-transform duration-200 hover:translate-x-5">
                     <input
                       type="checkbox"
-                      className="mr-2 cursor-crosshair text-3xl "
+                      className="h-3 w-3 cursor-pointer accent-[#c1c121] focus:ring-0 focus:outline-none "
                       checked={selectedTypes.includes(type)}
                       onChange={() => handleTypeChange(type)}
                     />

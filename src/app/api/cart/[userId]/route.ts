@@ -16,6 +16,7 @@ export async function GET(
       [userId]
     );
 
+
     return NextResponse.json({ cart: result.rows });
   } catch (error) {
     console.error(error);
@@ -47,7 +48,16 @@ export async function POST(
       [userId, productId, quantity]
     );
 
-    return NextResponse.json({ success: true, cartItem: result.rows[0] });
+    // saara cart fetch kro taki error na
+    const updatedCart = await pool.query(
+      `SELECT c.id, c.product_id, c.quantity, p.title, p.price, p.description, p.images
+      FROM cart c
+      JOIN products p ON c.product_id = p.id
+      WHERE c.user_id = $1`,
+      [userId]
+    );
+
+    return NextResponse.json({ success: true, cartItem: updatedCart.rows });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -77,7 +87,17 @@ export async function DELETE(
       );
     }
 
-    return NextResponse.json({ success: true, removed: result.rows[0] });
+     // saara cart fetch kro taki error na
+     const updatedCart = await pool.query(
+      `SELECT c.id, c.product_id, c.quantity, p.title, p.price, p.description, p.images
+      FROM cart c
+      JOIN products p ON c.product_id = p.id
+      WHERE c.user_id = $1`,
+      [userId]
+    );
+
+
+    return NextResponse.json({ success: true, removed: updatedCart.rows});
   } catch (error) {
     console.error(error);
     return NextResponse.json(
