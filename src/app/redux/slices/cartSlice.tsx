@@ -1,5 +1,5 @@
 // src/app/redux/slices/cartSlice.ts
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface CartItem {
@@ -56,10 +56,10 @@ export const addToCart = createAsyncThunk(
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async ({ userId, productId }: { userId: number; productId: number }) => {
-    const response = await axios.delete(`/api/cart/${userId}`, {
+    await axios.delete(`/api/cart/${userId}`, {
       data: { productId },
     });
-    return response.data.removed;
+    return productId;
   }
 );
 
@@ -100,7 +100,6 @@ const cartSlice = createSlice({
     //   const existing = state.items.find(
     //     (item) => item.productId === action.payload.productId
     //   );
-
     //   if (existing) {
     //     existing.quantity += 1;
     //   } else {
@@ -129,12 +128,32 @@ const cartSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message || "Failed to fetch cart";
       })
+
       .addCase(addToCart.fulfilled, (state, action) => {
-        state.items = action.payload; // add to  cart
+        const existingIndex = state.items.findIndex(
+          (item) => item.productId === action.payload.product_id
+        );
+
+        if (existingIndex !== -1) {
+          // update quantity if item already exists
+          state.items[existingIndex].quantity = action.payload.quantity;
+        } else {
+          // add new item
+          state.items.push({
+            id: action.payload.id,
+            productId: action.payload.product_id,
+            quantity: action.payload.quantity,
+            title: action.payload.title,
+            price: action.payload.price,
+            description: action.payload.description,
+            images: action.payload.images,
+          });
+        }
       })
+
       .addCase(removeFromCart.fulfilled, (state, action) => {
         state.items = state.items.filter(
-          (item) => item.id !== action.payload.id
+          (item) => item.productId !== action.payload
         );
       })
       .addCase(updateCartItem.fulfilled, (state, action) => {

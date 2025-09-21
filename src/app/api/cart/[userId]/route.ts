@@ -57,7 +57,8 @@ export async function POST(
       [userId]
     );
 
-    return NextResponse.json({ success: true, cartItem: updatedCart.rows });
+    return NextResponse.json({ success: true, cartItem: result.rows[0] });
+    
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -87,17 +88,7 @@ export async function DELETE(
       );
     }
 
-     // saara cart fetch kro taki error na
-     const updatedCart = await pool.query(
-      `SELECT c.id, c.product_id, c.quantity, p.title, p.price, p.description, p.images
-      FROM cart c
-      JOIN products p ON c.product_id = p.id
-      WHERE c.user_id = $1`,
-      [userId]
-    );
-
-
-    return NextResponse.json({ success: true, removed: updatedCart.rows});
+    return NextResponse.json({ success: true});
   } catch (error) {
     console.error(error);
     return NextResponse.json(

@@ -3,7 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import { useAppSelector } from "@/app/hooks/hooks";
+import { useAppSelector,useAppDispatch } from "@/app/hooks/hooks";
+import { fetchWishlist } from "@/app/redux/slices/wishlistSlice";
+import CartItemSkeleton from "@/components/collectionItemSkeleton";
+
+
+
+
 
 // interface ProductApi {
 //   id: number;
@@ -23,9 +29,12 @@ interface CollectionCardProps {
 export default function CollectionCard({ selectedTypes, sortBy , searchQuery }: CollectionCardProps) {
   // const [products, setProducts] = useState<ProductApi[]>([]);
 
-  const { products } = useAppSelector((state) => state.products);
+  const { products ,status } = useAppSelector((state) => state.products);
   const { userData } = useAppSelector((state)=>state.auth);
-  const { items:wishlistItems } = useAppSelector((state)=>state.wishlist);
+  const { items:wishlistItems  } = useAppSelector((state)=>state.wishlist);
+  const dispatch = useAppDispatch();
+
+
 
   // console.log("this is my products" ,products)
   // console.log("this is my products" ,userData)
@@ -80,12 +89,18 @@ export default function CollectionCard({ selectedTypes, sortBy , searchQuery }: 
     e.preventDefault(); // ✅ stop <Link> navigation
     e.stopPropagation()
 
+    if (!userData?.id) {
+      alert("Please log in to add items to your cart.");
+      return;
+    }
+
     try{
       const userId = userData?.id;
       const res = await axios.post(`/api/wishlist/${userId}`,{productId});
       console.log("this is my response in wishlist part",res)
       alert("Added to wishlist")
 
+      dispatch(fetchWishlist(userData.id))
     }
     catch(error){
       console.log(error)
@@ -96,7 +111,13 @@ export default function CollectionCard({ selectedTypes, sortBy , searchQuery }: 
 
   return (
     <div className=" grid grid-cols-3 epunda-slab-medium p-3 ">
-      {filteredProducts.map((product) => {
+
+
+      {status === "loading"
+      ? Array.from({ length: 6 }).map((_, i) => (
+          <CartItemSkeleton key={i} />
+        ))
+      : filteredProducts.map((product) => {
         return (
           <Link
             key={product.id}

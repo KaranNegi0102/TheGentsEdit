@@ -2,7 +2,7 @@
 import Navbar from "@/components/Navbar";
 import React,{useState} from "react";
 import CollectionCard from "@/components/collectionCard";
-import { Search } from 'lucide-react';
+import Footer from "../../../components/Footer";
 
 export default function Collection() {
 
@@ -83,6 +83,7 @@ export default function Collection() {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

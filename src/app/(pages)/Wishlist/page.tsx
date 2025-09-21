@@ -36,6 +36,7 @@ const Wishlist = () => {
 
   // const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [addingProductId, setAddingProductId] = useState<number | null>(null);
 
   console.log("this is my wishlist items",wishlistItems)
 
@@ -109,12 +110,12 @@ const Wishlist = () => {
   
   const handleAddToCart = async (item:any) => {
     if (!userData?.id) {
-      // alert("Please log in to add items to your cart.");
+      alert("Please log in to add items to your cart.");
       return;
     }
 
     if (!item.productId) {
-      // alert("Invalid product.");
+      alert("Invalid product.");
       return;
     }
 
@@ -129,27 +130,37 @@ const Wishlist = () => {
   //   })
   // );
 
-    await dispatch(addToCart({ userId: userData.id, productId: item.productId }));
-    // alert("Added to cart!");
 
-    dispatch(fetchCart(userData.id));
+  setAddingProductId(item.productId);
+
+  try {
+    await dispatch(addToCart({ userId: userData.id, productId: item.productId }));
+    // await dispatch(fetchCart(userData.id));
+  } finally {
+    setAddingProductId(null); // reset after API call finishes
+  }
+
+    // await dispatch(addToCart({ userId: userData.id, productId: item.productId }));
+    // // alert("Added to cart!");
+
+    // dispatch(fetchCart(userData.id));
   };
 
-  if (status === "loading") {
-    return (
-      <div className="bg-white  text-black min-h-screen">
-        <Navbar />
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-xl epunda-slab-light text-gray-600">
-              Loading your wishlist...
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  // if (status === "loading") {
+  //   return (
+  //     <div className="bg-white text-black min-h-screen">
+  //       <Navbar />
+  //       <div className="max-w-7xl backdrop-blur mx-auto px-6 py-8">
+  //         <div className="flex justify-center items-center h-64">
+  //           <div className="text-xl epunda-slab-light text-gray-600">
+  //             Loading your wishlist...
+  //           </div>
+  //         </div>
+  //       </div>
+  //       <Footer />
+  //     </div>
+  //   );
+  // }
 
   if (!userData) {
     return (
@@ -277,18 +288,20 @@ const Wishlist = () => {
 
                   <div className="flex gap-2">
                   <button
-                      onClick={() => handleAddToCart(item)}
-                      className={`flex-1 py-2 px-4 rounded-lg epunda-slab-medium cursor-pointer text-sm transition-colors ${
-                        alreadyInCart
-                          ? "bg-gray-400 text-white cursor-not-allowed"
-                          : "bg-black text-white hover:bg-gray-800"
-                      }`}
-                      disabled={alreadyInCart}
-                    >
-                      {alreadyInCart
-                        ? "Added"
-                        : "Add to Cart"}
-                    </button>
+                    onClick={() => handleAddToCart(item)}
+                    className={`flex-1 py-2 px-4 rounded-lg epunda-slab-medium cursor-pointer text-sm transition-colors ${
+                      alreadyInCart
+                        ? "bg-gray-400 text-white cursor-not-allowed"
+                        : "bg-black text-white hover:bg-gray-800"
+                    }`}
+                    disabled={alreadyInCart || addingProductId === item.productId}
+                  >
+                    {alreadyInCart
+                      ? "Added"
+                      : addingProductId === item.productId
+                      ? "Adding..."
+                      : "Add to Cart"}
+                  </button>
                     <button
                       onClick={() => handleRemoveFromWishList(item.productId)}
                       className="px-3 py-2 border border-gray-300 cursor-pointer rounded-lg hover:bg-gray-50 transition-colors"

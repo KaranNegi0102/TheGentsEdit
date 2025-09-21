@@ -70,7 +70,7 @@ export default function ProductInfo() {
     dispatch(addToCart({ userId: userData.id, productId }));
     alert("Added to cart!");
 
-    dispatch(fetchCart(userData.id));
+    // dispatch(fetchCart(userData.id));
   };
 
   // needed to update this below part
