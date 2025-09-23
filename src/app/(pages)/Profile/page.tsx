@@ -9,6 +9,8 @@ import axios from "axios";
 import Navbar from "@/components/Navbar";
 import { fetchUserData , logout } from "@/app/redux/slices/authSlice";
 import Link from "next/link";
+import { toast } from 'react-hot-toast';
+
 
 export default function ProfilePage() {
   const dispatch = useAppDispatch();
@@ -41,9 +43,25 @@ export default function ProfilePage() {
   const handleLogout = async () => {
     try {
       await axios.get("/api/auth/logout");
+      toast("Log Out Successful",{
+        icon:'☑️',
+        position:'top-right',
+        style:{
+          background:"black",
+          color:"white"
+        }
+      })
       dispatch(logout());
       router.push("/");
     } catch (error) {
+      toast("Log Out Failed",{
+        icon:'❌',
+        position:'top-right',
+        style:{
+          background:"black",
+          color:"white"
+        }
+      })
       console.log(error);
     }
   };
@@ -64,15 +82,37 @@ export default function ProfilePage() {
 
   const handleSaveChanges = async () => {
     try {
-      console.log("saving changes", editForm);
+      // console.log("saving changes", editForm);
       const res = await axios.put("/api/updateProfile", editForm, {
         withCredentials: true,
       });
-      // console.log(response)
-      dispatch(fetchUserData());
-      setEditForm(res.data.userData);
-      setIsEditing(false);
-      alert("profile updated")
+      if(res.data.success){
+        // console.log(res)
+        toast("Changes Saved",{
+          icon:'☑️',
+          position:'top-right',
+          style:{
+            background:"black",
+            color:"white"
+          }
+        })
+        dispatch(fetchUserData());
+        setEditForm(res.data.userData);
+        setIsEditing(false);
+        // alert("profile updated")
+      }
+      else{
+        toast("Changes Not Saved",{
+          icon:'❌',
+          position:'top-right',
+          style:{
+            background:"black",
+            color:"white"
+          }
+        })
+        // alert("profile not updated")
+      }
+      
     } catch (error) {
       console.error("Error updating profile:", error);
     } finally {
@@ -157,7 +197,7 @@ export default function ProfilePage() {
 
       {/* Profile Content */}
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm border text-gray-700 border-gray-200 overflow-hidden">
           {/* Profile Header */}
           <div className="bg-gray-700 px-6 py-8 text-white">
             <div className="flex items-center justify-between">

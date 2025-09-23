@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Image from "next/image";
-import rightSideImage from "../../public/RightSideImage.jpg";
+// import rightSideImage from "../../public/RightSideImage.jpg";
 import exchangeLogo from "../../public/exchangeLogo.png";
 import returnLogo from "../../public/returnlogo.png";
 import policyLogo from "../../public/policylogo.png";
@@ -13,7 +13,7 @@ import gsap from "gsap";
 import { useEffect, useRef } from "react";
 import ProductCard from "@/components/productCard";
 import TextPlugin from "gsap/TextPlugin";
-import { useAppSelector } from "@/app/hooks/hooks";
+// import { useAppSelector } from "@/app/hooks/hooks";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(TextPlugin, ScrollTrigger);
@@ -29,7 +29,26 @@ export default function Home() {
   const cardsRef2 = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
 
-  const { products } = useAppSelector((state) => state.products);
+  // const { products } = useAppSelector((state) => state.products);
+
+
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Lock scroll during loading
+    document.body.style.overflow = "hidden";
+
+    // Timeout for loader (e.g., 3 seconds)
+    const timer = setTimeout(() => {
+      setLoading(false);
+      document.body.style.overflow = "auto"; // unlock scroll
+      ScrollTrigger.refresh(); // recalc triggers after DOM is visible
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
 
   useEffect(() => {
     if (textRef.current) {

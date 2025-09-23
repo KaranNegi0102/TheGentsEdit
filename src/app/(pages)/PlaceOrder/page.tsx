@@ -12,7 +12,7 @@ const PlaceOrder = () => {
 
 
   const { userData } = useAppSelector((state) => state.auth);
-  console.log(userData?.address)
+  // console.log(userData?.address)
   const userId = userData?.id;
   
   const [shippingAddress, setShippingAddress] = useState(userData?.address ||"");

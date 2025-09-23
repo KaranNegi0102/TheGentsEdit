@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
-import { useAppSelector } from "@/app/hooks/hooks";
+// import { useAppSelector } from "@/app/hooks/hooks";
 import { ShoppingBag } from "lucide-react";
 import model from "../../public/model.jpg";
 import Image from "next/image";
 
 const LandingProduct = () => {
-  const { products } = useAppSelector((state) => state.products);
-  console.log("this is my products", products);
+  // const { products } = useAppSelector((state) => state.products);
+  // console.log("this is my products", products);
 
   return (
     <div className="bg-gray-100 min-h-screen flex items-center">

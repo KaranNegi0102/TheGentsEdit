@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from 'react-hot-toast';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -47,7 +48,7 @@ export default function AuthModal({
 
   const onLogin = async (data: { email: string; password: string }) => {
     try {
-      console.log("the login data is => ", data);
+      // console.log("the login data is => ", data);
 
       const response = await axios.post("/api/auth/login", data, {
         withCredentials: true,
@@ -58,13 +59,18 @@ export default function AuthModal({
       // console.log("this is my response user ->" ,response.data.success)
 
       if (response.data.success) {
-        console.log("user Logged In successfully");
-
+        // console.log("user Logged In successfully");
+        toast.success("Login Successful",{
+          position:"top-right"
+        });
         onClose();
         router.push("/");
         window.location.reload();
       } else {
-        console.log("user not logged in ");
+        toast.error("Login Failed",{
+          position:"top-center"
+        })
+        // console.log("user not logged in ");
       }
     } catch (error) {
       console.log(error);
@@ -88,13 +94,15 @@ export default function AuthModal({
       const response = await axios.post("/api/auth/register",formData,{
         withCredentials:true,
       })
-      console.log("this is my response ",response)
+      // console.log("this is my response ",response)
       if(response.data.success){
-        console.log("user register successfully");
+        toast.success("Registration Successful")
+        // console.log("user register successfully");
         onTypeChange("login");
       }
       else{
-        console.log("user not register");
+        toast.error("Registration Failed")
+        // console.log("user not register");
       }
     }
     catch(error){

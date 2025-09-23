@@ -6,9 +6,12 @@ import { addToCart, fetchCart } from "@/app/redux/slices/cartSlice";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import ProductInfoSkeleton from "@/components/ProductInfoSkeleton";
 import { useAppSelector, useAppDispatch } from "@/app/hooks/hooks";
 import { fetchProducts } from "@/app/redux/slices/productSlice";
 import { useParams } from "next/navigation";
+import Link from "next/link"
+import { toast } from 'react-hot-toast';
 
 // interface Product {
 //   id: number;
@@ -58,28 +61,81 @@ export default function ProductInfo() {
 
   const handleAddToCart = async () => {
     if (!userData?.id) {
-      alert("Please log in to add items to your cart.");
+      toast(
+        "Please Log In To Add Items To Your Cart.",
+        {
+          duration: 2000,
+        }
+      );
+      // alert("Please log in to add items to your cart.");
       return;
     }
 
     if (!productId) {
-      alert("Invalid product.");
+      toast.error("Invalid product.")
+      // alert("Invalid product.");
       return;
     }
 
     dispatch(addToCart({ userId: userData.id, productId }));
-    alert("Added to cart!");
+    toast("Added to cart",{
+      icon:'🛒',
+      position:'bottom-center',
+      style:{
+        background:"black",
+        color:"white"
+      }
+    })
+    // alert("Added to cart!");
 
     // dispatch(fetchCart(userData.id));
   };
 
   // needed to update this below part
   if (status === "loading" && !product) {
-    return <p className="p-8">Loading...</p>;
+    return (
+      <div className="bg-white mt-17 text-black">
+        <Navbar />
+        <ProductInfoSkeleton />
+        <Footer />
+      </div>
+    );
   }
 
   if (!product) {
-    return <p className="p-8">Product not found.</p>;
+    return (
+      <div className="bg-white mt-17 text-black">
+        <Navbar />
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-10 text-center">
+            <div className="mx-auto mb-6 h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center">
+              <span className="text-2xl">🛍️</span>
+            </div>
+            <h2 className="text-2xl epunda-slab-medium text-gray-800 mb-2">
+              Product not found
+            </h2>
+            <p className="text-gray-600 epunda-slab-light mb-6">
+              It may have been removed or is temporarily unavailable.
+            </p>
+            <div className="flex gap-3 justify-center">
+              <a
+                href="/collection"
+                className="bg-black text-white px-5 py-2 rounded-lg epunda-slab-medium hover:bg-gray-800"
+              >
+                Browse collection
+              </a>
+              <Link
+                href="/"
+                className="border border-gray-300 text-gray-800 px-5 py-2 rounded-lg epunda-slab-medium hover:bg-gray-100"
+              >
+                Go home
+              </Link>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   const images =

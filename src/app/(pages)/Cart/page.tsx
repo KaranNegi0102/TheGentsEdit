@@ -8,11 +8,12 @@ import {
   fetchCart,
   removeFromCart,
   updateCartItem,
+  updateCartItemLocal,
 } from "@/app/redux/slices/cartSlice";
 import Link from "next/link";
 import { Trash } from "lucide-react";
-
 import CartItemSkeleton from "@/components/cartItemSkeleton";
+import {toast} from "react-hot-toast";
 
 // interface CartItemType {
 //   id: number;
@@ -28,6 +29,7 @@ const Cart = () => {
   const dispatch = useAppDispatch();
   const { userData } = useAppSelector((state) => state.auth);
   const { items: cartItems, status } = useAppSelector((state) => state.cart);
+
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -42,12 +44,44 @@ const Cart = () => {
     };
   }, []);
 
+  // const updateQuantity = (productId: number, newQuantity: number) => {
+  //   if (newQuantity <= 0) {
+  //     removeItem(productId);
+  //     return;
+  //   }
+
+  //   if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+
+  //   debounceTimeoutRef.current = setTimeout(() => {
+  //     if (userData?.id) {
+  //       dispatch(
+  //         updateCartItem({
+  //           userId: userData.id,
+  //           productId,
+  //           quantity: newQuantity,
+  //         })
+  //       ).then(() => {
+  //         dispatch(fetchCart(userData.id));
+  //       });
+  //     }
+  //   }, 3000);
+  // };
+
   const updateQuantity = (productId: number, newQuantity: number) => {
     if (newQuantity <= 0) {
       removeItem(productId);
       return;
     }
 
+    // Update UI immediately by changing Redux state
+    dispatch(
+      updateCartItemLocal({
+        productId,
+        quantity: newQuantity,
+      })
+    );
+
+    // Debounce backend update
     if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
 
     debounceTimeoutRef.current = setTimeout(() => {
@@ -58,16 +92,30 @@ const Cart = () => {
             productId,
             quantity: newQuantity,
           })
-        ).then(() => {
-          dispatch(fetchCart(userData.id));
-        });
+        );
+        toast("Updated quantity",{
+          icon:'✅',
+          position:'top-right',
+          style:{
+            background:"black",
+            color:"white"
+          }
+        })
       }
-    }, 3000);
+    });
   };
 
   const removeItem = (productId: number) => {
     if (userData?.id) {
       dispatch(removeFromCart({ userId: userData.id, productId }));
+      toast("Removed from Cart",{
+        icon:'🛒',
+        position:'bottom-center',
+        style:{
+          background:"black",
+          color:"white"
+        }
+      })
     }
   };
 
@@ -95,11 +143,11 @@ const Cart = () => {
         ) : cartItems.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-xl epunda-slab-light text-gray-600 mb-4">
-              Your cart is looks empty right now.
+              Your cart looks empty right now.
             </p>
             <a
               href="/collection"
-              className="bg-black text-white px-6 py-3 rounded-lg epunda-slab-medium hover:bg-gray-800 transition-colors"
+              className="bg-gray-700 text-white px-6 py-3 rounded-lg epunda-slab-medium hover:bg-gray-800 transition-colors"
             >
               Lets Go For Shopping
             </a>
@@ -201,7 +249,10 @@ const Cart = () => {
                     <div className="flex justify-between epunda-slab-light">
                       <span>
                         Subtotal (
-                        {cartItems.reduce((sum, item) => sum + item.quantity, 0)}{" "}
+                        {cartItems.reduce(
+                          (sum, item) => sum + item.quantity,
+                          0
+                        )}{" "}
                         items)
                       </span>
                       <span>₹{subtotal.toLocaleString()}</span>

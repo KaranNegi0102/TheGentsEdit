@@ -1,11 +1,10 @@
-"use client"
-import React,{useState,useEffect} from 'react'
-import axios from "axios"
-import Image from "next/image"
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Image from "next/image";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { useAppSelector } from "@/app/hooks/hooks";
-
 
 interface OrderItem {
   product_id: number;
@@ -23,68 +22,85 @@ interface Order {
   payment_method: string;
   created_at: string;
   shipping_address: string;
-  items: OrderItem[]; 
+  items: OrderItem[];
 }
 
 const Order = () => {
-
-  const [orders,setOrders]=useState<Order[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [expandedOrders, setExpandedOrders] = useState<number[]>([]);
   const { userData } = useAppSelector((state) => state.auth);
-  console.log(userData)
+  // console.log(userData)
 
-  const userId=userData?.id;
-  console.log(userId);
+  const userId = userData?.id;
+  // console.log(userId);
   // console.log(`/api/orders/${userId}`)
 
-
-  useEffect(()=>{
-    const fetchOrderData = async () =>{
-      try{
-        const response = await axios.get(`/api/orders/${userId}`)
-        setOrders(response.data.orders)
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      try {
+        const response = await axios.get(`/api/orders/${userId}`);
+        setOrders(response.data.orders);
         // console.log(response);
         // console.log(response.data.orders);
-      }catch(error){
+      } catch (error) {
         console.log(error);
       }
-    }
-    fetchOrderData()
-  },[userId])
+    };
+    fetchOrderData();
+  }, [userId]);
 
   const toggleExpand = (orderId: number) => {
-    setExpandedOrders((prev) =>
-      prev.includes(orderId)
-        ? prev.filter((id) => id !== orderId) // collapse if open
-        : [...prev, orderId] // expand if closed
+    setExpandedOrders(
+      (prev) =>
+        prev.includes(orderId)
+          ? prev.filter((id) => id !== orderId) // collapse if open
+          : [...prev, orderId] // expand if closed
     );
   };
 
   return (
     <div className="max-w-7xl max-h-7xl epunda-slab-medium bg-white mx-auto p-6">
-      <Navbar/>
-      <h1 className="text-3xl mt-16 font-bold  text-gray-700 mb-6">My Orders</h1>
-    
+      <Navbar />
+      <h1 className="text-3xl mt-16 font-bold  text-gray-700 mb-6">
+        My Orders
+      </h1>
 
-      <div className='flex flex-col-2 gap-3'>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {orders.length === 0 ? (
-          <p>No orders found.</p>
+          <p>No orders found. Or maybe loading ... </p>
         ) : (
           orders.map((order) => (
             <div
               key={order.order_id}
-              className="flex-1 min-w-[300px] max-w-sm mb-6 border bg-gray-50 border-gray-300 rounded-lg shadow-md p-4"
+              className="w-full h-full  border bg-blue-50 border-gray-300 rounded-lg shadow-md p-4"
             >
               {/* Order Details */}
               <div className="mb-4 text-gray-500">
                 <h2 className="text-xl text-gray-800 font-semibold">
                   Order #{order.order_id}
                 </h2>
-                <p>Status: <span className="font-medium text-gray-900">{order.status}</span></p>
-                <p>Total Amount: <span className='text-gray-900'>₹{order.total_amount}</span> </p>
-                <p>Payment: <span className='text-gray-900' >{order.payment_method}</span> </p>
+                <p>
+                  Status:{" "}
+                  <span className="font-medium text-gray-900">
+                    {order.status}
+                  </span>
+                </p>
+                <p>
+                  Total Amount:{" "}
+                  <span className="text-gray-900">₹{order.total_amount}</span>{" "}
+                </p>
+                <p>
+                  Payment:{" "}
+                  <span className="text-gray-900">{order.payment_method}</span>{" "}
+                </p>
                 <p>Date: {new Date(order.created_at).toLocaleString()}</p>
-                <p>Address: <span className='text-gray-900'> {order.shipping_address} </span> </p>
+                <p>
+                  Address:{" "}
+                  <span className="text-gray-900">
+                    {" "}
+                    {order.shipping_address}{" "}
+                  </span>{" "}
+                </p>
               </div>
 
               {/* Items in the Order */}
@@ -100,15 +116,15 @@ const Order = () => {
 
               {/* Items in the Order */}
               {expandedOrders.includes(order.order_id) && (
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold mb-2 text-gray-800">
+                <div className="mt-4 ">
+                  <h3 className="text-lg font-semibold mb-2  text-gray-800">
                     Items
                   </h3>
                   <ul className="space-y-3">
                     {order.items.map((item, idx) => (
                       <li
                         key={idx}
-                        className="flex items-center space-x-4 border-b pb-2"
+                        className="flex items-center  space-x-4 border-b pb-2"
                       >
                         <Image
                           src={item.image}
@@ -135,9 +151,9 @@ const Order = () => {
           ))
         )}
       </div>
-      <Footer/>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Order
+export default Order;

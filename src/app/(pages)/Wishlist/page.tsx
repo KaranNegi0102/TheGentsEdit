@@ -11,6 +11,7 @@ import {
   fetchWishlist,
   removeFromWishlist,
 } from "@/app/redux/slices/wishlistSlice";
+import { toast } from 'react-hot-toast';
 
 
 
@@ -38,7 +39,7 @@ const Wishlist = () => {
   const [error, setError] = useState<string | null>(null);
   const [addingProductId, setAddingProductId] = useState<number | null>(null);
 
-  console.log("this is my wishlist items",wishlistItems)
+  // console.log("this is my wishlist items",wishlistItems)
 
 
   // Fetch wishlist
@@ -87,6 +88,15 @@ const Wishlist = () => {
   const handleRemoveFromWishList = (productId: number) => {
     if (!userData?.id) return;
     dispatch(removeFromWishlist({ userId: userData.id, productId }));
+    toast("Removed from wishlist",{
+      icon:'💔',
+      position:'top-center',
+      style:{
+        background:"black",
+        color:"white"
+      }
+    })
+
   };
   // const removeFromWishlist = async (productId: number) => {
   //   if (!userData?.id) return;
@@ -110,12 +120,19 @@ const Wishlist = () => {
   
   const handleAddToCart = async (item:any) => {
     if (!userData?.id) {
-      alert("Please log in to add items to your cart.");
+      toast(
+        "Please Log In To Add Items To Your Cart.",
+        {
+          duration: 2000,
+        }
+      );
+      // alert("Please log in to add items to your cart.");
       return;
     }
 
     if (!item.productId) {
-      alert("Invalid product.");
+      toast.error("Invalid product.")
+      // alert("Invalid product.");
       return;
     }
 
@@ -135,6 +152,14 @@ const Wishlist = () => {
 
   try {
     await dispatch(addToCart({ userId: userData.id, productId: item.productId }));
+    toast("Added to cart",{
+      icon:'🛒',
+      position:'bottom-center',
+      style:{
+        background:"black",
+        color:"white"
+      }
+    })
     // await dispatch(fetchCart(userData.id));
   } finally {
     setAddingProductId(null); // reset after API call finishes

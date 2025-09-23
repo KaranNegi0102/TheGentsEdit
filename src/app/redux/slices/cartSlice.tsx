@@ -86,6 +86,11 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    updateCartItemLocal: (state, action) => {
+      const { productId, quantity } = action.payload;
+      const idx = state.items.findIndex(item => item.productId === productId);
+      if (idx >= 0) state.items[idx].quantity = quantity;
+    },
     // // ✅ Optimistic update reducer
     // addToCartOptimistic: (
     //   state,
@@ -161,9 +166,11 @@ const cartSlice = createSlice({
         const idx = state.items.findIndex(
           (item) => item.productId === updated.productId
         );
-        if (idx >= 0) state.items[idx] = updated;
+        if (idx >= 0) state.items[idx].quantity = updated.quantity;
       });
   },
 });
+
+export const { updateCartItemLocal } = cartSlice.actions;
 
 export default cartSlice.reducer;

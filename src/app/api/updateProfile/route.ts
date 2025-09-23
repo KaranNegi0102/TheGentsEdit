@@ -29,7 +29,7 @@ export async function PUT(req: NextRequest) {
     const userId = decoded.id;
 
     const { name, email, phone_number, address } = await req.json();
-    console.log("this is my details form ",name,email,phone_number,address)
+    // console.log("this is my details form ",name,email,phone_number,address)
 
     await pool.query(
       `UPDATE "Users" SET name=$1,email=$2,phone_number=$3,address=$4 WHERE id=$5 RETURNING *`,

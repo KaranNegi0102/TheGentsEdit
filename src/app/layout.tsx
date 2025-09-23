@@ -4,6 +4,8 @@ import "./globals.css";
 import Provider from "@/app/redux/Provider"
 import InitAuth from "./redux/InitAuth";
 import InitProducts from "./redux/InitProducts";
+import { Toaster } from "react-hot-toast";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +35,8 @@ export default function RootLayout({
         <Provider>
           <InitAuth>
             <InitProducts>
-              {children}
+              <Toaster />
+                {children}
             </InitProducts>
           </InitAuth>
         </Provider>

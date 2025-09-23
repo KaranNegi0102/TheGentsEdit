@@ -51,8 +51,8 @@ export async function DELETE(
     const { userId } = await context.params;
     const { productId } = await req.json();
 
-    console.log("this is my productId", productId);
-    console.log("this is my userId", userId);
+    // console.log("this is my productId", productId);
+    // console.log("this is my userId", userId);
 
 
     await pool.query(

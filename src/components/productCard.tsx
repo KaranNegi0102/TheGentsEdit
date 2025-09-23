@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useAppSelector } from "@/app/hooks/hooks";
-import Link from "next/link"
+import Link from "next/link";
 
 interface ProductCardProps {
   type: "latest" | "bestSeller";
@@ -12,15 +12,18 @@ interface ProductCardProps {
 export default function ProductCard({ type }: ProductCardProps) {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { products } = useAppSelector((state) => state.products);
-  console.log("this is my products in product card", products);
+  // console.log("this is my products in product card", products);
 
   const filteredProducts = useMemo(() => {
     if (type === "latest") {
-      return [...products].sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      ).slice(0, 8).sort(() => Math.random() - 0.5).reverse();
-
+      return [...products]
+        .sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        )
+        .slice(0, 8)
+        .sort(() => Math.random() - 0.5)
+        .reverse();
     } else if (type === "bestSeller") {
       return products.filter((p) => p.best_seller === true).slice(0, 4);
     }
@@ -148,12 +151,16 @@ export default function ProductCard({ type }: ProductCardProps) {
   //   },
   // ];
 
-  console.log("this is my filtereed products", filteredProducts);
+  // console.log("this is my filtereed products", filteredProducts);
 
   return (
     <div className="flex  flex-wrap p-4 justify-center">
       {filteredProducts.map((product) => (
-        <Link key={product.id} href={`/productInfo/${product.id}`} className="mt-8">
+        <Link
+          key={product.id}
+          href={`/productInfo/${product.id}`}
+          className="mt-8"
+        >
           <div
             ref={(el) => {
               cardRefs.current[product.id] = el;
@@ -169,7 +176,9 @@ export default function ProductCard({ type }: ProductCardProps) {
               className="object-cover   h-[245px] w-full mb-4 "
             />
             <div className="text-left ">
-              <h3 className="text-md epunda-slab-medium mb-2 line-clamp-1">{product.title}</h3>
+              <h3 className="text-md epunda-slab-medium mb-2 line-clamp-1">
+                {product.title}
+              </h3>
               {/* <p className="text-gray-600 mb-2 line-clamp-2">
                 {product.description}
               </p> */}

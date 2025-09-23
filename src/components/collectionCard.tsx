@@ -6,7 +6,7 @@ import axios from "axios";
 import { useAppSelector,useAppDispatch } from "@/app/hooks/hooks";
 import { fetchWishlist } from "@/app/redux/slices/wishlistSlice";
 import CartItemSkeleton from "@/components/collectionItemSkeleton";
-
+import { toast } from 'react-hot-toast';
 
 
 
@@ -38,7 +38,7 @@ export default function CollectionCard({ selectedTypes, sortBy , searchQuery }: 
 
   // console.log("this is my products" ,products)
   // console.log("this is my products" ,userData)
-  console.log("this is my products in cartitems in collection card" ,wishlistItems)
+  // console.log("this is my products in cartitems in collection card" ,wishlistItems)
 
 
   let filteredProducts = products;
@@ -90,21 +90,36 @@ export default function CollectionCard({ selectedTypes, sortBy , searchQuery }: 
     e.stopPropagation()
 
     if (!userData?.id) {
-      alert("Please log in to add items to your cart.");
+      toast(
+        "Please Log In First To Add Items To Your Cart.",
+        {
+          duration: 2000,
+        }
+      );
+      // alert("Please log in to add items to your cart.");
       return;
     }
 
     try{
       const userId = userData?.id;
-      const res = await axios.post(`/api/wishlist/${userId}`,{productId});
-      console.log("this is my response in wishlist part",res)
-      alert("Added to wishlist")
+      await axios.post(`/api/wishlist/${userId}`,{productId});
+      // console.log("this is my response in wishlist part",res)
+      toast("Added to wishlist",{
+        icon:'❤️',
+        position:'top-center',
+        style: {
+          background: "black",
+          color: "white",
+        },
+      })
+      // alert("Added to wishlist")
 
       dispatch(fetchWishlist(userData.id))
     }
     catch(error){
       console.log(error)
-      alert("not added to wishlist")
+      toast.error("Failed to Add")
+      // alert("not added to wishlist")
     }
   }
 
