@@ -77,7 +77,7 @@ export default function ProductInfo() {
       return;
     }
 
-    dispatch(addToCart({ userId: userData.id, productId }));
+    await dispatch(addToCart({ userId: userData.id, productId }));
     toast("Added to cart",{
       icon:'🛒',
       position:'bottom-center',

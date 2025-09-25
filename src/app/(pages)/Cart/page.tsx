@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { Trash } from "lucide-react";
 import CartItemSkeleton from "@/components/cartItemSkeleton";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 // interface CartItemType {
 //   id: number;
@@ -67,7 +67,7 @@ const Cart = () => {
   //   }, 3000);
   // };
 
-  const updateQuantity = (productId: number, newQuantity: number) => {
+  const updateQuantity = async (productId: number, newQuantity: number) => {
     if (newQuantity <= 0) {
       removeItem(productId);
       return;
@@ -84,7 +84,7 @@ const Cart = () => {
     // Debounce backend update
     if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
 
-    debounceTimeoutRef.current = setTimeout(() => {
+    debounceTimeoutRef.current = setTimeout(async () => {
       if (userData?.id) {
         dispatch(
           updateCartItem({
@@ -93,29 +93,29 @@ const Cart = () => {
             quantity: newQuantity,
           })
         );
-        toast("Updated quantity",{
-          icon:'✅',
-          position:'top-right',
-          style:{
-            background:"black",
-            color:"white"
-          }
-        })
+        toast("Updated quantity", {
+          icon: "✅",
+          position: "top-right",
+          style: {
+            background: "black",
+            color: "white",
+          },
+        });
       }
     });
   };
 
-  const removeItem = (productId: number) => {
+  const removeItem = async (productId: number) => {
     if (userData?.id) {
-      dispatch(removeFromCart({ userId: userData.id, productId }));
-      toast("Removed from Cart",{
-        icon:'🛒',
-        position:'bottom-center',
-        style:{
-          background:"black",
-          color:"white"
-        }
-      })
+      await dispatch(removeFromCart({ userId: userData.id, productId }));
+      toast("Removed from Cart", {
+        icon: "🛒",
+        position: "bottom-center",
+        style: {
+          background: "black",
+          color: "white",
+        },
+      });
     }
   };
 
@@ -130,8 +130,8 @@ const Cart = () => {
     <div className="bg-white text-black mt-17 min-h-screen">
       <Navbar />
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <h1 className="text-3xl text-center epunda-slab-medium mb-8 text-[#4F4F4D]">
-          My Cart
+        <h1 className="text-3xl text-center epunda-slab-medium mb-8 text-gray-500">
+          –– My <span className="text-black">Cart –– </span>
         </h1>
 
         {status === "loading" ? (
@@ -238,41 +238,30 @@ const Cart = () => {
                   Order Summary
                 </h2>
 
-                {status === "loading" ? (
-                  <div className="space-y-4 animate-pulse">
-                    <div className="h-6 bg-gray-300 rounded w-1/2" />
-                    <div className="h-6 bg-gray-300 rounded w-1/3" />
-                    <div className="h-10 bg-gray-300 rounded w-full" />
+                <div className="space-y-4 mb-6">
+                  <div className="flex justify-between epunda-slab-light">
+                    <span>
+                      Subtotal (
+                      {cartItems.reduce((sum, item) => sum + item.quantity, 0)}{" "}
+                      items)
+                    </span>
+                    <span>₹{subtotal.toLocaleString()}</span>
                   </div>
-                ) : (
-                  <div className="space-y-4 mb-6">
-                    <div className="flex justify-between epunda-slab-light">
-                      <span>
-                        Subtotal (
-                        {cartItems.reduce(
-                          (sum, item) => sum + item.quantity,
-                          0
-                        )}{" "}
-                        items)
+
+                  <div className="flex justify-between epunda-slab-light">
+                    <span>GST (18%)</span>
+                    <span>₹{tax.toLocaleString()}</span>
+                  </div>
+
+                  <div className="border-t border-gray-300 pt-4">
+                    <div className="flex justify-between text-xl epunda-slab-medium">
+                      <span>Total</span>
+                      <span className="text-[#4F4F4D]">
+                        ₹{total.toLocaleString()}
                       </span>
-                      <span>₹{subtotal.toLocaleString()}</span>
-                    </div>
-
-                    <div className="flex justify-between epunda-slab-light">
-                      <span>GST (18%)</span>
-                      <span>₹{tax.toLocaleString()}</span>
-                    </div>
-
-                    <div className="border-t border-gray-300 pt-4">
-                      <div className="flex justify-between text-xl epunda-slab-medium">
-                        <span>Total</span>
-                        <span className="text-[#4F4F4D]">
-                          ₹{total.toLocaleString()}
-                        </span>
-                      </div>
                     </div>
                   </div>
-                )}
+                </div>
 
                 <Link href="/PlaceOrder">
                   <button className="w-full bg-black text-white py-3 rounded-lg epunda-slab-medium hover:bg-gray-800 transition-colors mb-4">

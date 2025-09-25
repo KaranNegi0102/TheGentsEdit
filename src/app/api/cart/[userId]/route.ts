@@ -48,15 +48,6 @@ export async function POST(
       [userId, productId, quantity]
     );
 
-    // saara cart fetch kro taki error na
-    const updatedCart = await pool.query(
-      `SELECT c.id, c.product_id, c.quantity, p.title, p.price, p.description, p.images
-      FROM cart c
-      JOIN products p ON c.product_id = p.id
-      WHERE c.user_id = $1`,
-      [userId]
-    );
-
     return NextResponse.json({ success: true, cartItem: result.rows[0] });
     
   } catch (error) {

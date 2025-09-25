@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import Image from "next/image";
 // import rightSideImage from "../../public/RightSideImage.jpg";
@@ -33,7 +33,7 @@ export default function Home() {
 
 
 
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Lock scroll during loading
@@ -41,7 +41,7 @@ export default function Home() {
 
     // Timeout for loader (e.g., 3 seconds)
     const timer = setTimeout(() => {
-      setLoading(false);
+      // setLoading(false);
       document.body.style.overflow = "auto"; // unlock scroll
       ScrollTrigger.refresh(); // recalc triggers after DOM is visible
     }, 3000);

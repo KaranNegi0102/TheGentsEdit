@@ -16,7 +16,7 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const { isLoggedIn, userData, loading } = useAppSelector(
+  const { isLoggedIn, userData } = useAppSelector(
     (state) => state.auth
   );
 

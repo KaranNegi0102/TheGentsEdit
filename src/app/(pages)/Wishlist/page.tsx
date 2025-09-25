@@ -4,18 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useAppSelector , useAppDispatch } from "@/app/hooks/hooks";
-import { addToCart,fetchCart } from "@/app/redux/slices/cartSlice";
+import { useAppSelector, useAppDispatch } from "@/app/hooks/hooks";
+import { addToCart } from "@/app/redux/slices/cartSlice";
 // import axios from "axios";
 import {
   fetchWishlist,
   removeFromWishlist,
 } from "@/app/redux/slices/wishlistSlice";
-import { toast } from 'react-hot-toast';
-
-
-
-
+import { toast } from "react-hot-toast";
 
 // interface WishlistItem {
 //   id: number;
@@ -30,31 +26,23 @@ const Wishlist = () => {
   const { userData } = useAppSelector((state) => state.auth);
   // const { products } = useAppSelector((state) => state.products);
   const { items: cartItems, status } = useAppSelector((state) => state.cart);
-  const { items:wishlistItems } = useAppSelector((state) => state.wishlist);
+  const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
 
   const dispatch = useAppDispatch();
 
-
   // const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [addingProductId, setAddingProductId] = useState<number | null>(null);
 
   // console.log("this is my wishlist items",wishlistItems)
 
-
   // Fetch wishlist
   useEffect(() => {
-    if (userData?.id ) {
+    if (userData?.id) {
       dispatch(fetchWishlist(userData.id));
     }
   }, [userData, dispatch]);
   // useEffect(() => {
-
-
-
-
-
-
 
   //   const fetchWishlist = async () => {
   //     if (!userData?.id) {
@@ -78,36 +66,30 @@ const Wishlist = () => {
   //   fetchWishlist();
   // }, [userData]);
 
-
-
-
   // Remove item from wishlist
-  
-  
-  
-  const handleRemoveFromWishList = (productId: number) => {
-    if (!userData?.id) return;
-    dispatch(removeFromWishlist({ userId: userData.id, productId }));
-    toast("Removed from wishlist",{
-      icon:'💔',
-      position:'top-center',
-      style:{
-        background:"black",
-        color:"white"
-      }
-    })
 
+  const handleRemoveFromWishList = async (productId: number) => {
+    if (!userData?.id) return;
+    await dispatch(removeFromWishlist({ userId: userData.id, productId }));
+    toast("Removed from wishlist", {
+      icon: "💔",
+      position: "top-center",
+      style: {
+        background: "black",
+        color: "white",
+      },
+    });
   };
   // const removeFromWishlist = async (productId: number) => {
   //   if (!userData?.id) return;
-  
+
   //   try {
   //     const userId = userData.id;
-  
+
   //     await axios.delete(`/api/wishlist/${userId}`, {
   //       data: { productId },
   //     });
-  
+
   //     setWishlistItems((prev) =>
   //       prev.filter((item) => item.product_id !== productId)
   //     );
@@ -117,53 +99,50 @@ const Wishlist = () => {
   //   }
   // };
 
-  
-  const handleAddToCart = async (item:any) => {
+  const handleAddToCart = async (item: any) => {
     if (!userData?.id) {
-      toast(
-        "Please Log In To Add Items To Your Cart.",
-        {
-          duration: 2000,
-        }
-      );
+      toast("Please Log In To Add Items To Your Cart.", {
+        duration: 2000,
+      });
       // alert("Please log in to add items to your cart.");
       return;
     }
 
     if (!item.productId) {
-      toast.error("Invalid product.")
+      toast.error("Invalid product.");
       // alert("Invalid product.");
       return;
     }
 
-  //   // 🚀 Optimistic update (instant cart badge update)
-  // dispatch(
-  //   addToCartOptimistic({
-  //     productId: item.productId,
-  //     title: item.title,
-  //     price: item.price,
-  //     description: item.description,
-  //     images: item.images,
-  //   })
-  // );
+    //   // 🚀 Optimistic update (instant cart badge update)
+    // dispatch(
+    //   addToCartOptimistic({
+    //     productId: item.productId,
+    //     title: item.title,
+    //     price: item.price,
+    //     description: item.description,
+    //     images: item.images,
+    //   })
+    // );
 
+    setAddingProductId(item.productId);
 
-  setAddingProductId(item.productId);
-
-  try {
-    await dispatch(addToCart({ userId: userData.id, productId: item.productId }));
-    toast("Added to cart",{
-      icon:'🛒',
-      position:'bottom-center',
-      style:{
-        background:"black",
-        color:"white"
-      }
-    })
-    // await dispatch(fetchCart(userData.id));
-  } finally {
-    setAddingProductId(null); // reset after API call finishes
-  }
+    try {
+      await dispatch(
+        addToCart({ userId: userData.id, productId: item.productId })
+      );
+      toast("Added to cart", {
+        icon: "🛒",
+        position: "bottom-center",
+        style: {
+          background: "black",
+          color: "white",
+        },
+      });
+      // await dispatch(fetchCart(userData.id));
+    } finally {
+      setAddingProductId(null); // reset after API call finishes
+    }
 
     // await dispatch(addToCart({ userId: userData.id, productId: item.productId }));
     // // alert("Added to cart!");
@@ -193,7 +172,20 @@ const Wishlist = () => {
         <Navbar />
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center py-16">
-            <h1 className="text-4xl epunda-slab-medium mb-8 text-[#4F4F4D]">
+            <h1 className="text-4xl epunda-slab-medium mb-8 text-[#4F4F4D] flex items-center gap-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-8 h-8 text-red-500"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 
+             0 3.41 1.01 4.13 2.44h.74C14.09 5.01 15.76 4 17.5 4 
+             20 4 22 6 22 8.5c0 3.78-3.4 6.86-8.55 
+             11.54L12 21.35z"
+                />
+              </svg>
               My Wishlist
             </h1>
             <p className="text-xl epunda-slab-light text-gray-600 mb-4">
@@ -217,13 +209,13 @@ const Wishlist = () => {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <h1 className="text-4xl epunda-slab-medium mb-8 text-[#4F4F4D]">
-          My Wishlist
+        <h1 className="text-3xl epunda-slab-medium mb-8 text-gray-500  gap-3">
+          My <span className="text-black"> Wishlist ––––</span>
         </h1>
 
-        {status === "failed" && error && (
+        {status === "failed" && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-600 epunda-slab-light">{error}</p>
+            <p className="text-red-600 epunda-slab-light">Failed</p>
           </div>
         )}
 
@@ -260,96 +252,102 @@ const Wishlist = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {wishlistItems.map((item) => {
-              const alreadyInCart = Array.isArray(cartItems) &&
-              cartItems.some((cartItem) => cartItem.productId === item.productId);            
+              const alreadyInCart =
+                Array.isArray(cartItems) &&
+                cartItems.some(
+                  (cartItem) => cartItem.productId === item.productId
+                );
               return (
-              <div
-                key={item.id}
-                className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
-              >
-                {/* <p>{item.idofproduct}</p> */}
-                <Link href={`/productInfo/${item.productId}`}>
-                  <div className="relative">
-                    <Image
-                      src={item.images?.[0] || "/placeholder.jpg"}
-                      alt={item.title}
-                      width={300}
-                      height={300}
-                      className="w-full h-64 object-cover"
-                    />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleRemoveFromWishList(item.productId);
-                      }}
-                      className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:bg-gray-50 transition-colors"
-                      title="Remove from wishlist"
-                    >
-                      <svg
-                        className="w-5 h-5 text-red-500"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </Link>
-
-                <div className="p-4">
+                <div
+                  key={item.id}
+                  className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                >
+                  {/* <p>{item.idofproduct}</p> */}
                   <Link href={`/productInfo/${item.productId}`}>
-                    <h3 className="text-lg epunda-slab-medium mb-2 line-clamp-1 hover:text-gray-600 transition-colors ">
-                      {item.title}
-                    </h3>
+                    <div className="relative">
+                      <Image
+                        src={item.images?.[0] || "/placeholder.jpg"}
+                        alt={item.title}
+                        width={300}
+                        height={300}
+                        className="w-full h-64 object-cover"
+                      />
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleRemoveFromWishList(item.productId);
+                        }}
+                        className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:bg-gray-50 transition-colors"
+                        title="Remove from wishlist"
+                      >
+                        <svg
+                          className="w-5 h-5 text-red-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </Link>
 
-                  <p className="text-xl epunda-slab-medium text-[#4F4F4D] mb-4">
-                    ₹{item.price.toLocaleString()}
-                  </p>
+                  <div className="p-4">
+                    <Link href={`/productInfo/${item.productId}`}>
+                      <h3 className="text-lg epunda-slab-medium mb-2 line-clamp-1 hover:text-gray-600 transition-colors ">
+                        {item.title}
+                      </h3>
+                    </Link>
 
-                  <div className="flex gap-2">
-                  <button
-                    onClick={() => handleAddToCart(item)}
-                    className={`flex-1 py-2 px-4 rounded-lg epunda-slab-medium cursor-pointer text-sm transition-colors ${
-                      alreadyInCart
-                        ? "bg-gray-400 text-white cursor-not-allowed"
-                        : "bg-black text-white hover:bg-gray-800"
-                    }`}
-                    disabled={alreadyInCart || addingProductId === item.productId}
-                  >
-                    {alreadyInCart
-                      ? "Added"
-                      : addingProductId === item.productId
-                      ? "Adding..."
-                      : "Add to Cart"}
-                  </button>
-                    <button
-                      onClick={() => handleRemoveFromWishList(item.productId)}
-                      className="px-3 py-2 border border-gray-300 cursor-pointer rounded-lg hover:bg-gray-50 transition-colors"
-                      title="Remove from wishlist"
-                    >
-                      <svg
-                        className="w-4 h-4 text-gray-500"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    <p className="text-xl epunda-slab-medium text-[#4F4F4D] mb-4">
+                      ₹{item.price.toLocaleString()}
+                    </p>
+
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleAddToCart(item)}
+                        className={`flex-1 py-2 px-4 rounded-lg epunda-slab-medium cursor-pointer text-sm transition-colors ${
+                          alreadyInCart
+                            ? "bg-gray-400 text-white cursor-not-allowed"
+                            : "bg-black text-white hover:bg-gray-800"
+                        }`}
+                        disabled={
+                          alreadyInCart || addingProductId === item.productId
+                        }
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
+                        {alreadyInCart
+                          ? "Added"
+                          : addingProductId === item.productId
+                          ? "Adding..."
+                          : "Add to Cart"}
+                      </button>
+                      <button
+                        onClick={() => handleRemoveFromWishList(item.productId)}
+                        className="px-3 py-2 border border-gray-300 cursor-pointer rounded-lg hover:bg-gray-50 transition-colors"
+                        title="Remove from wishlist"
+                      >
+                        <svg
+                          className="w-4 h-4 text-gray-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )})}
+              );
+            })}
           </div>
         )}
 

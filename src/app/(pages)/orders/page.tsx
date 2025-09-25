@@ -61,8 +61,8 @@ const Order = () => {
   return (
     <div className="max-w-7xl max-h-7xl epunda-slab-medium bg-white mx-auto p-6">
       <Navbar />
-      <h1 className="text-3xl mt-16 font-bold  text-gray-700 mb-6">
-        My Orders
+      <h1 className="text-3xl mt-16 font-bold text-center text-gray-700 mb-6">
+      –– My <span className="text-black">Orders –– </span>
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

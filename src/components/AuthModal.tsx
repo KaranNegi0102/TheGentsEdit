@@ -43,7 +43,6 @@ export default function AuthModal({
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<{ email: string; password: string,name:string,phone_number:string,address:string }>();
 
   const onLogin = async (data: { email: string; password: string }) => {
