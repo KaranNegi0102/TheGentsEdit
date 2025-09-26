@@ -61,8 +61,8 @@ const Order = () => {
     setExpandedOrders(
       (prev) =>
         prev.includes(orderId)
-          ? prev.filter((id) => id !== orderId) // collapse if open
-          : [...prev, orderId] // expand if closed
+          ? prev.filter((id) => id !== orderId) 
+          : [...prev, orderId] 
     );
   };
 
@@ -126,31 +126,31 @@ const Order = () => {
           orders.map((order) => (
             <div
               key={order.order_id}
-              className="w-full h-full  border bg-blue-50 border-gray-300 rounded-lg shadow-md p-4"
+              className="w-full h-full  border bg-gray-700 text-white border-gray-300 rounded-lg shadow-md p-4"
             >
               {/* Order Details */}
-              <div className="mb-4 text-gray-500">
-                <h2 className="text-xl text-gray-800 font-semibold">
+              <div className="mb-4 ">
+                <h2 className="text-xl font-semibold">
                   Order #{order.order_id}
                 </h2>
                 <p>
                   Status:{" "}
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium ">
                     {order.status}
                   </span>
                 </p>
                 <p>
                   Total Amount:{" "}
-                  <span className="text-gray-900">₹{order.total_amount}</span>{" "}
+                  <span className="">₹{order.total_amount}</span>{" "}
                 </p>
                 <p>
                   Payment:{" "}
-                  <span className="text-gray-900">{order.payment_method}</span>{" "}
+                  <span className="">{order.payment_method}</span>{" "}
                 </p>
                 <p>Date: {new Date(order.created_at).toLocaleString()}</p>
                 <p>
                   Address:{" "}
-                  <span className="text-gray-900">
+                  <span className="">
                     {" "}
                     {order.shipping_address}{" "}
                   </span>{" "}
@@ -161,7 +161,7 @@ const Order = () => {
               {/* Toggle Button */}
               <button
                 onClick={() => toggleExpand(order.order_id)}
-                className="text-gray-600 cursor-pointer  font-medium"
+                className=" cursor-pointer  font-medium"
               >
                 {expandedOrders.includes(order.order_id)
                   ? "Hide Items ▲"
@@ -171,7 +171,7 @@ const Order = () => {
               {/* Items in the Order */}
               {expandedOrders.includes(order.order_id) && (
                 <div className="mt-4 ">
-                  <h3 className="text-lg font-semibold mb-2  text-gray-800">
+                  <h3 className="text-lg font-semibold mb-2 ">
                     Items
                   </h3>
                   <ul className="space-y-3">
@@ -188,11 +188,11 @@ const Order = () => {
                           className="w-16 h-16 object-cover rounded-md"
                         />
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium ">
                             {item.title}
                           </p>
-                          <p className="text-sm text-gray-600">{item.brand}</p>
-                          <p className="text-gray-600">
+                          <p className="text-sm ">{item.brand}</p>
+                          <p className="">
                             Qty: {item.quantity} × ₹{item.price}
                           </p>
                         </div>
