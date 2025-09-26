@@ -36,11 +36,7 @@
 ### 📦 State Management with Redux Toolkit  
 - Centralized global state for authentication, cart, and wishlist.  
 - Async thunks for smooth API integration.  
-
-### 🎨 Responsive UI with Tailwind CSS  
-- Fully responsive & modern design.  
-- Styled with **Tailwind CSS** for a clean and adaptive layout.   
-
+  
 ---
 
 ## 🛠️ Tech Stack  
