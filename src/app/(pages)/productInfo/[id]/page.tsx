@@ -10,8 +10,8 @@ import ProductInfoSkeleton from "@/components/ProductInfoSkeleton";
 import { useAppSelector, useAppDispatch } from "@/app/hooks/hooks";
 import { fetchProducts } from "@/app/redux/slices/productSlice";
 import { useParams } from "next/navigation";
-import Link from "next/link"
-import { toast } from 'react-hot-toast';
+import Link from "next/link";
+import { toast } from "react-hot-toast";
 
 // interface Product {
 //   id: number;
@@ -39,6 +39,7 @@ export default function ProductInfo() {
   const product = products.find((p) => String(p.id) == String(id));
 
   const [mainImage, setMainImage] = useState("/logo.png");
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   useEffect(() => {
     if (!products.length && status == "idle") {
@@ -61,31 +62,28 @@ export default function ProductInfo() {
 
   const handleAddToCart = async () => {
     if (!userData?.id) {
-      toast(
-        "Please Log In To Add Items To Your Cart.",
-        {
-          duration: 2000,
-        }
-      );
+      toast("Please Log In To Add Items To Your Cart.", {
+        duration: 2000,
+      });
       // alert("Please log in to add items to your cart.");
       return;
     }
 
     if (!productId) {
-      toast.error("Invalid product.")
+      toast.error("Invalid product.");
       // alert("Invalid product.");
       return;
     }
 
     await dispatch(addToCart({ userId: userData.id, productId }));
-    toast("Added to cart",{
-      icon:'🛒',
-      position:'bottom-center',
-      style:{
-        background:"black",
-        color:"white"
-      }
-    })
+    toast("Added to cart", {
+      icon: "🛒",
+      position: "bottom-center",
+      style: {
+        background: "black",
+        color: "white",
+      },
+    });
     // alert("Added to cart!");
 
     // dispatch(fetchCart(userData.id));
@@ -196,6 +194,26 @@ export default function ProductInfo() {
           </p>
           <div className="space-y-2">
             <p className="text-lg epunda-slab-light text-green-600">In STOCK</p>
+          </div>
+          {/* Size selection */}
+          <div className="space-y-2 pt-2">
+            <p className="text-2xl epunda-slab-light text-gray-700">Size</p>
+            <div className="flex gap-2 flex-wrap">
+              {["S", "M", "L", "XL"].map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => setSelectedSize(size)}
+                  className={`p-4 mb-8 mt-4 hover:cursor-pointer border transition-colors duration-200 text-sm epunda-slab-light ${
+                    selectedSize === size
+                      ? "bg-black text-white border-black"
+                      : "bg-white text-gray-800 border-gray-300 hover:border-gray-500"
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
           </div>
           <button
             onClick={handleAddToCart}
